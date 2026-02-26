@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultados en Vivo - Competencias Locales</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#111;
+  color:white;
+  text-align:center;
+}
+
+.header{
+  padding:25px 15px;
+  background:#000;
+  border-bottom:2px solid #b87333;
+}
+
+.header img{
+  width:110px;
+  border-radius:50%;
+  border:3px solid #b87333;
+}
+
+.header h1{
+  margin:15px 0 5px;
+  font-size:20px;
+}
+
+.header p{
+  font-size:13px;
+  color:#ccc;
+}
+
+.header a{
+  color:#b87333;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.buttons{
+  margin:30px 0;
+}
+
+.btn{
+  display:inline-block;
+  margin:10px;
+  padding:14px 30px;
+  background:#b87333;
+  color:white;
+  font-size:16px;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.btn:hover{
+  background:#8a4b1c;
+}
+
+.content{
+  width:95%;
+  max-width:1000px;
+  margin:20px auto 60px;
+  text-align:left;
+}
+
+.section-title{
+  font-size:18px;
+  margin:30px 0 10px;
+  color:#b87333;
+  border-bottom:1px solid #333;
+  padding-bottom:5px;
+}
+
+.card{
+  background:#1a1a1a;
+  padding:12px;
+  margin-bottom:8px;
+  border-radius:4px;
+  border-left:4px solid #b87333;
+}
+
+.loading{
+  text-align:center;
+  margin-top:30px;
+  color:#aaa;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="https://i.postimg.cc/zB74zfKK/Logo-Kennel.jpg">
+  <h1>Planilla Electrónica - Competencias LOCALES</h1>
+  <p>
+    Desarrollada por 
+    <a href="https://ehenquin.github.io/LinkTreePro/" target="_blank">
+      Dr. Eduardo R. Henquín
+    </a>
+  </p>
+</div>
+
+<div class="buttons">
+  <div class="btn" onclick="modo='razas'; cargar()">Resultados Razas</div>
+  <div class="btn" onclick="modo='bis'; cargar()">Finales BIS</div>
+</div>
+
+<div id="contenido" class="content">
+  <div class="loading">Seleccione una opción.</div>
+</div>
+
+<script>
+
+// 🔴 PONÉ AQUÍ TU WEBAPP URL
+const API = "https://ehenquin.github.io/Exposiciones_Estructura_Y_Belleza_Kennel_Club_Santa_Fe_LOCALES/";
+
+let modo = null;
+
+async function cargar(){
+
+  if(!modo) return;
+
+  document.getElementById("contenido").innerHTML =
+    '<div class="loading">Actualizando resultados...</div>';
+
+  try{
+
+    const endpoint = modo === "razas"
+      ? "getResultadosRazasPublico"
+      : "getResultadosBisPublico";
+
+    const res = await fetch(API + endpoint);
+    const data = await res.json();
+
+    render(data);
+
+  }catch(e){
+    document.getElementById("contenido").innerHTML =
+      '<div class="loading">Error de conexión</div>';
+  }
+}
+
+function render(data){
+
+  if(!data || data.length === 0){
+    document.getElementById("contenido").innerHTML =
+      '<div class="loading">Sin resultados aún</div>';
+    return;
+  }
+
+  let html = "";
+
+  data.forEach(seccion => {
+
+    html += `<div class="section-title">${seccion.titulo}</div>`;
+
+    seccion.items.forEach(item => {
+
+      html += `
+        <div class="card">
+          <strong>#${item.numero}</strong> - ${item.raza}
+          ${item.puesto ? ` - ${item.puesto}°` : ""}
+        </div>
+      `;
+
+    });
+
+  });
+
+  document.getElementById("contenido").innerHTML = html;
+}
+
+// 🔁 Auto refresh cada 5 segundos
+setInterval(() => {
+  if(modo){
+    cargar();
+  }
+}, 5000);
+
+</script>
+
+</body>
+</html>
