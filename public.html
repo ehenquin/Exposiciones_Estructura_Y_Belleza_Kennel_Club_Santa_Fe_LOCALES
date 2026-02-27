@@ -117,72 +117,114 @@ body{
 
 <script>
 
-// 🔴 PONÉ AQUÍ TU WEBAPP URL
-const API = "https://ehenquin.github.io/Exposiciones_Estructura_Y_Belleza_Kennel_Club_Santa_Fe_LOCALES/";
+const API = "https://script.google.com/macros/s/AKfycbwT50gHRrJxqhx1jp6PKL1Fp4lxe5H2Kft60U1uUAjokLqoI2x2rpwqczWRab_PsAzVtw/exec";
 
 let modo = null;
 
-async function cargar(){
+async function cargar(esSilencioso = false){
 
   if(!modo) return;
 
-  document.getElementById("contenido").innerHTML =
-    '<div class="loading">Actualizando resultados...</div>';
+  // Solo mostramos "Cargando..." si no es una actualización de fondo
+  if(!esSilencioso) {
+    document.getElementById("contenido").innerHTML =
+      '<div class="loading">Actualizando resultados...</div>';
+  }
 
   try{
-
-    const endpoint = modo === "razas"
-      ? "getResultadosRazasPublico"
-      : "getResultadosBisPublico";
-
-    const res = await fetch(API + endpoint);
+    const res = await fetch(API + "?tipo=" + modo);
     const data = await res.json();
-
     render(data);
-
   }catch(e){
-    document.getElementById("contenido").innerHTML =
-      '<div class="loading">Error de conexión</div>';
+    if(!esSilencioso) {
+      document.getElementById("contenido").innerHTML =
+        '<div class="loading">Error de conexión</div>';
+    }
   }
 }
 
-function render(data){
-
-  if(!data || data.length === 0){
-    document.getElementById("contenido").innerHTML =
-      '<div class="loading">Sin resultados aún</div>';
+function render(data) {
+  const contenedor = document.getElementById("contenido");
+  if (!data || data.length === 0) {
+    contenedor.innerHTML = '<div class="loading">Sin resultados aún</div>';
     return;
   }
 
-  let html = "";
+  // 1. Ordenar datos: Pista -> Juez -> Categoría
+  data.sort((a, b) => {
+    const pistaA = String(a.pista || 'ZZZ');
+    const pistaB = String(b.pista || 'ZZZ');
+    if (pistaA !== pistaB) return pistaA.localeCompare(pistaB);
 
-  data.forEach(seccion => {
+    const juezA = String(a.juez || 'ZZZ');
+    const juezB = String(b.juez || 'ZZZ');
+    if (juezA !== juezB) return juezA.localeCompare(juezB);
 
-    html += `<div class="section-title">${seccion.titulo}</div>`;
-
-    seccion.items.forEach(item => {
-
-      html += `
-        <div class="card">
-          <strong>#${item.numero}</strong> - ${item.raza}
-          ${item.puesto ? ` - ${item.puesto}°` : ""}
-        </div>
-      `;
-
-    });
-
+    return (a.categoria || '').localeCompare(b.categoria || '');
   });
 
-  document.getElementById("contenido").innerHTML = html;
+  let html = "";
+  let ultimoJuez = "";
+  let ultimaCat = "";
+
+  data.forEach(item => {
+    const juezActual = `${item.pista || "SP"}-${item.juez || "SJ"}`;
+    const catActual = item.categoria || "Sin Categoría";
+
+    // DIVISION DE JUEZ
+    if (juezActual !== ultimoJuez) {
+      const txtPista = item.pista ? `Pista ${item.pista}` : "Pista -";
+      const txtJuez = item.juez ? `Juez: ${item.juez}` : "Juez -";
+      
+      html += `
+        <div class="section-title" style="margin-top:40px; border-bottom:3px solid #b87333; font-size:20px;">
+          ${txtPista} | ${txtJuez}
+        </div>
+      `;
+      ultimoJuez = juezActual;
+      ultimaCat = ""; 
+    }
+
+    // DIVISION DE CATEGORÍA
+    if (catActual !== ultimaCat) {
+      html += `
+        <div style="background:#333; color:#b87333; padding:5px 10px; margin:15px 0 10px; font-weight:bold; font-size:14px; text-transform:uppercase; border-left:10px solid #b87333;">
+          Categoría: ${catActual}
+        </div>
+      `;
+      ultimaCat = catActual;
+    }
+
+    // TARJETA DEL PERRO (Modificado el formato del título)
+    html += `
+      <div class="card">
+        <div style="margin-bottom: 5px;">
+          <strong>#${item.numero} - ${item.raza} | ${item.categoria} | ${item.sexo}</strong>
+          <span style="float:right; color:#b87333; font-weight:bold;">
+            ${item.puesto ? item.puesto + "°" : ""}
+            ${item.calificacion ? " [" + item.calificacion + "]" : ""}
+          </span>
+        </div>
+        <div style="font-size: 11px; color: #888;">
+          ${item.tipoBis || ""}
+        </div>
+      </div>
+    `;
+  });
+
+  contenedor.innerHTML = html;
 }
 
-// 🔁 Auto refresh cada 5 segundos
+
+
+
+
+// Auto refresh cada 5 segundos en modo silencioso (sin parpadeos)
 setInterval(() => {
-  if(modo){
-    cargar();
+  if (modo) {
+    cargar(true);
   }
 }, 5000);
-
 </script>
 
 </body>
