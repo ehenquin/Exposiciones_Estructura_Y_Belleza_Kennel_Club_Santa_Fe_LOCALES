@@ -4381,6 +4381,8 @@ window.guardarResultadoBis = async (e, inscId, puesto, tipoBis) => {
       rec.Ausente = nuevoAus;
 
       if (nuevoAus) {
+        rec.PuestoBIS = "AUS"; // 🔥 ACÁ ESTABA EL ERROR
+      } else {
         rec.PuestoBIS = "";
       }
 
