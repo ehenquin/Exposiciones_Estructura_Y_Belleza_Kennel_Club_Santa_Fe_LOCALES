@@ -230,24 +230,26 @@ function normalizarTextoCategoria(v) {
 }
 
 function normalizarIDCategoria(valor, idSexo = null) {
-  const raw = String(valor || "").trim().toUpperCase();
+  const raw = String(valor || "")
+    .trim()
+    .toUpperCase();
   if (!raw) return "";
 
   const MAP_BACKEND = {
-    "C00": { "S01": "C15", "S02": "C16" },
-    "C01": { "S01": "C1",  "S02": "C2"  },
-    "C02": { "S01": "C3",  "S02": "C4"  },
-    "C04": { "S01": "C5",  "S02": "C9"  },
-    "C05": { "S01": "C6",  "S02": "C10" },
-    "C07": { "S01": "C07", "S02": "C07" },
-    "C08": { "S01": "C13", "S02": "C14" }
+    C00: { S01: "C15", S02: "C16" },
+    C01: { S01: "C1", S02: "C2" },
+    C02: { S01: "C3", S02: "C4" },
+    C04: { S01: "C5", S02: "C9" },
+    C05: { S01: "C6", S02: "C10" },
+    C07: { S01: "C07", S02: "C07" },
+    C08: { S01: "C13", S02: "C14" },
   };
 
   if (MAP_BACKEND[raw] && idSexo && MAP_BACKEND[raw][idSexo]) {
     return MAP_BACKEND[raw][idSexo];
   }
 
-  if (CATEGORIAS_LOCALES.some(c => String(c.id).toUpperCase() === raw)) {
+  if (CATEGORIAS_LOCALES.some((c) => String(c.id).toUpperCase() === raw)) {
     return raw;
   }
 
@@ -502,6 +504,18 @@ async function syncAll() {
       res.data.Catalogo_Perros_Inscriptos = inscripcionesNormalizadas;
 
     setStatus("Sincronizado.");
+
+    const ctx = getPlanillaFinalesContextoActual?.();
+    if (ctx) {
+      ctx.aside.innerHTML = renderPlanillaFinalesHTML(
+        ctx.perrosRaza,
+        ctx.sexos,
+        ctx.juezId,
+        ctx.idEventoActivo,
+        ctx.esLimitada,
+        ctx.resultadosRaza,
+      );
+    }
 
     const rows = CACHE.get("Catalogo_Perros_Inscriptos") || [];
     sugerirNroCatalogo(rows);
@@ -2283,6 +2297,13 @@ const TITULO_GANADO_BIS_POR_BLOQUE = {
   "BIS ADULTOS": "MEJOR_RAZA_ADULTO",
 };
 
+const ROL_FINAL_RAZA_POR_TITULO_GANADO = Object.fromEntries(
+  Object.entries(TITULO_GANADO_POR_ROL_FINAL_RAZA).map(([rol, titulo]) => [
+    titulo,
+    rol,
+  ]),
+);
+
 const FINAL_RAZA_BLOQUES = [
   {
     titulo: "Cachorros especiales",
@@ -2359,17 +2380,57 @@ function sexoKind(perro, sexos = []) {
   return raw.startsWith("h") || raw.includes("f") ? "H" : sexoCategoria || "M";
 }
 
+function asegurarCamposResultadoRaza(resultado) {
+  if (!resultado) return resultado;
+  resultado.Puesto = String(resultado.Puesto || "");
+  resultado.Calificacion = String(resultado.Calificacion || "");
+  resultado.Ausente = isTruthy(resultado.Ausente);
+  resultado.Titulo_Ganado = String(resultado.Titulo_Ganado || "");
+  resultado.RolesFinalRaza = String(resultado.RolesFinalRaza || "");
+
+  if (resultado.Calificacion.toUpperCase() === "AUS" || resultado.Ausente) {
+    resultado.Ausente = true;
+    resultado.Calificacion = "AUS";
+    resultado.Puesto = "";
+    resultado.Titulo_Ganado = "";
+    resultado.RolesFinalRaza = "";
+    return resultado;
+  }
+
+  if (!resultado.RolesFinalRaza && resultado.Titulo_Ganado) {
+    resultado.RolesFinalRaza =
+      ROL_FINAL_RAZA_POR_TITULO_GANADO[resultado.Titulo_Ganado] || "";
+  }
+
+  return resultado;
+}
+
+function payloadResultadoRaza(resultado) {
+  asegurarCamposResultadoRaza(resultado);
+  return {
+    ...resultado,
+    IDInscripcion: resultado.IDInscripcion || "",
+    IDEvento: resultado.IDEvento || "",
+    IDJuez: resultado.IDJuez || "",
+    Puesto: resultado.Puesto || "",
+    Calificacion: resultado.Calificacion || "",
+    Ausente: isTruthy(resultado.Ausente),
+    Titulo_Ganado: resultado.Titulo_Ganado || "",
+  };
+}
+
 function getResultadoRaza(idInscripcion, idJuez, idEvento) {
   const res = CACHE.get("Resultados_Razas") || [];
   const nP = normalizeID(idInscripcion),
     nJ = normalizeID(idJuez),
     nE = normalizeID(idEvento);
-  return res.find(
+  const resultado = res.find(
     (x) =>
       normalizeID(x.IDInscripcion) === nP &&
       normalizeID(x.IDJuez) === nJ &&
       normalizeID(x.IDEvento) === nE,
   );
+  return asegurarCamposResultadoRaza(resultado);
 }
 
 function tienePrimerPuestoRaza(perro, juezId, eventoId) {
@@ -2601,6 +2662,65 @@ function mismaFilaOficialPlanilla(a, b, sexos = []) {
   return !!fa && !!fb && String(fa.nro) === String(fb.nro);
 }
 
+function rehidratarFinalesDesdeResultados(
+  resultados,
+  perrosRaza,
+  juezId,
+  idEventoActivo,
+) {
+  const perrosPorId = new Map(
+    (perrosRaza || []).map((p) => [normalizeID(p.IDInscripcion), p]),
+  );
+
+  const porRol = new Map();
+
+  (resultados || []).forEach((resultado) => {
+    if (
+      normalizeID(resultado.IDEvento) !== normalizeID(idEventoActivo) ||
+      normalizeID(resultado.IDJuez) !== normalizeID(juezId)
+    ) {
+      return;
+    }
+
+    if (
+      String(resultado.Calificacion || "")
+        .trim()
+        .toUpperCase() === "AUS" ||
+      isTruthy(resultado.Ausente)
+    ) {
+      return;
+    }
+
+    const perro = perrosPorId.get(normalizeID(resultado.IDInscripcion));
+    if (!perro) return;
+
+    const roles = splitMulti(resultado.RolesFinalRaza);
+
+    const rolPorTitulo =
+      ROL_FINAL_RAZA_POR_TITULO_GANADO[String(resultado.Titulo_Ganado || "")] ||
+      "";
+
+    const rolesFinales = Array.from(
+      new Set([...(roles || []), ...(rolPorTitulo ? [rolPorTitulo] : [])]),
+    ).filter(Boolean);
+
+    rolesFinales.forEach((rol) => {
+      if (!porRol.has(rol)) porRol.set(rol, []);
+      const arr = porRol.get(rol);
+      if (
+        !arr.some(
+          (p) =>
+            normalizeID(p.IDInscripcion) === normalizeID(perro.IDInscripcion),
+        )
+      ) {
+        arr.push(perro);
+      }
+    });
+  });
+
+  return porRol;
+}
+
 function renderBloquesFinalesRaza(
   bloques,
   perrosRaza,
@@ -2608,7 +2728,15 @@ function renderBloquesFinalesRaza(
   juezId,
   idEventoActivo,
   extraClass = "",
+  resultadosRaza = [],
 ) {
+  const finalesRehidratadas = rehidratarFinalesDesdeResultados(
+    resultadosRaza,
+    perrosRaza,
+    juezId,
+    idEventoActivo,
+  );
+
   return bloques
     .map(
       (bloque) => `
@@ -2616,12 +2744,21 @@ function renderBloquesFinalesRaza(
       <div class="finales-raza-bloque-title">${bloque.titulo}</div>
       ${bloque.roles
         .map((rol) => {
-          const candidatos = perrosCandidatosRol(
+          const candidatosCalculados = perrosCandidatosRol(
             rol,
             perrosRaza,
             sexos,
             juezId,
             idEventoActivo,
+          );
+          const candidatosRehidratados = finalesRehidratadas.get(rol) || [];
+          const candidatos = Array.from(
+            new Map(
+              [...candidatosCalculados, ...candidatosRehidratados].map((p) => [
+                normalizeID(p.IDInscripcion),
+                p,
+              ]),
+            ).values(),
           );
           return `
           <div class="final-rol">
@@ -2636,9 +2773,10 @@ function renderBloquesFinalesRaza(
                           juezId,
                           idEventoActivo,
                         );
-                        const activo = splitMulti(r?.RolesFinalRaza).includes(
-                          rol,
-                        );
+                        const activo =
+                          splitMulti(r?.RolesFinalRaza).includes(rol) ||
+                          ROL_FINAL_RAZA_POR_TITULO_GANADO[r?.Titulo_Ganado] ===
+                            rol;
                         const aus = isTruthy(r?.Ausente);
                         return `<button type="button" class="btn-xs final-btn ${activo ? "active multi" : ""}" ${aus ? "disabled" : ""}
                           onclick="window.guardarResultado(event, '${escapeAttr(p.IDInscripcion)}','${escapeAttr(juezId)}','${escapeAttr(idEventoActivo)}','${rol}','RolesFinalRaza', true)">#${p.NumeroCatalogo}</button>`;
@@ -2700,14 +2838,15 @@ function renderPlanillaFinalesHTML(
   juezId,
   idEventoActivo,
   esLimitada,
+  resultadosRaza = [],
 ) {
   return `
     <h3>Finales simples</h3>
     <div class="finales-simples-grid">
-      ${renderBloquesFinalesRaza(FINAL_RAZA_BLOQUES_SIMPLES, perrosRaza, sexos, juezId, idEventoActivo, "finales-raza-bloque-simple")}
+      ${renderBloquesFinalesRaza(FINAL_RAZA_BLOQUES_SIMPLES, perrosRaza, sexos, juezId, idEventoActivo, "finales-raza-bloque-simple", resultadosRaza)}
     </div>
     <h3>Finales internas de raza</h3>
-    ${renderBloquesFinalesRaza(FINAL_RAZA_BLOQUES_RESTANTES, perrosRaza, sexos, juezId, idEventoActivo)}
+    ${renderBloquesFinalesRaza(FINAL_RAZA_BLOQUES_RESTANTES, perrosRaza, sexos, juezId, idEventoActivo, "", resultadosRaza)}
   `;
 }
 
@@ -2725,6 +2864,7 @@ function getPlanillaFinalesContextoActual() {
   const razas = CACHE.get("Catalogo_Razas") || [];
   const sexos = CACHE.get("Catalogo_Sexos") || [];
   const jueces = CACHE.get("Jueces") || [];
+  const resultadosRaza = CACHE.get("Resultados_Razas") || [];
 
   const juezActual = jueces.find(
     (j) => normalizeID(j.IDJuez) === normalizeID(juezId),
@@ -2758,7 +2898,15 @@ function getPlanillaFinalesContextoActual() {
       ),
     );
 
-  return { aside, perrosRaza, sexos, juezId, idEventoActivo, esLimitada };
+  return {
+    aside,
+    perrosRaza,
+    sexos,
+    juezId,
+    idEventoActivo,
+    esLimitada,
+    resultadosRaza,
+  };
 }
 
 let planillaDerechaRefreshTimer = null;
@@ -2776,6 +2924,7 @@ function refreshPlanillaDerechaDebounced(
       ctx.juezId,
       ctx.idEventoActivo,
       ctx.esLimitada,
+      ctx.resultadosRaza,
     );
     restorePlanillaScrollState(state);
   }, delay);
@@ -2789,9 +2938,21 @@ function updatePlanillaPerroVisual(btn, campo, rec) {
 
   if (campo === "Ausente") {
     const isAus = isTruthy(rec?.Ausente);
+
+    // 🔥 FORZAR que en BIS quede escrito AUS en la Sheet
+    if (isAus) {
+      rec.PuestoBIS = "AUS";
+    } else {
+      if (rec.PuestoBIS === "AUS") {
+        rec.PuestoBIS = "";
+      }
+    }
+
     btn.classList.toggle("active", isAus);
+
     if (perroCard) {
       perroCard.classList.toggle("is-ausente", isAus);
+
       perroCard
         .querySelectorAll(
           ".linea-puestos .btn-xs:not(.btn-aus), .linea-calificaciones .btn-xs",
@@ -2800,8 +2961,10 @@ function updatePlanillaPerroVisual(btn, campo, rec) {
           b.disabled = isAus;
           if (isAus) b.classList.remove("active");
         });
+
       const idMini = perroCard.querySelector(".perro-id-mini");
       const label = idMini?.querySelector(".aus-mini-label");
+
       if (isAus && idMini && !label) {
         idMini.insertAdjacentHTML(
           "beforeend",
@@ -2811,6 +2974,7 @@ function updatePlanillaPerroVisual(btn, campo, rec) {
         label.remove();
       }
     }
+
     return;
   }
 
@@ -2837,6 +3001,7 @@ async function renderJuzgamiento(pistaNro = null) {
   const sexos = CACHE.get("Catalogo_Sexos") || [];
   const eventos = CACHE.get("Eventos") || [];
   const jueces = CACHE.get("Jueces") || [];
+  const resultadosRaza = CACHE.get("Resultados_Razas") || [];
 
   let juezId = window._juezSeleccionadoPista?.idJuez || "";
   let pistaActual = pistaNro || window._juezSeleccionadoPista?.pista || "";
@@ -3025,7 +3190,7 @@ async function renderJuzgamiento(pistaNro = null) {
           </table>
         </div>
         <aside class="planilla-finales">
-          ${renderPlanillaFinalesHTML(perrosRaza, sexos, juezId, idEventoActivo, esLimitada)}
+          ${renderPlanillaFinalesHTML(perrosRaza, sexos, juezId, idEventoActivo, esLimitada, resultadosRaza)}
         </aside>
       </div>
     </div>
@@ -3611,367 +3776,102 @@ async function saveJuez() {
 window.saveEvento = saveEvento;
 window.saveJuez = saveJuez;
 
-window.guardarResultado = async (
+window.guardarResultado = async function (
   e,
-  idP,
-  idJ,
-  idE,
-  val,
+  idInscripcion,
+  idJuez,
+  idEvento,
+  valor,
   campo,
   esMulti = false,
-) => {
-  // 1. Captura inmediata del evento para que no se pierda
-  if (e) {
-    if (typeof e.preventDefault === "function") e.preventDefault();
-    if (typeof e.stopPropagation === "function") e.stopPropagation();
-  }
+) {
+  e?.stopPropagation?.();
 
-  if (!idE || idE === "undefined") return;
+  const nP = normalizeID(idInscripcion);
+  const nJ = normalizeID(idJuez);
+  const nE = normalizeID(idEvento);
 
-  // 2. Identificar el botón exacto que recibió el clic
-  const btn = e?.currentTarget || e?.target?.closest?.(".btn-xs");
-  if (!btn) return;
+  let resultados = CACHE.get("Resultados_Razas") || [];
 
-  // 3. Bloqueo de seguridad: evita doble clic accidental mientras se procesa
-  if (btn.disabled) return;
-  btn.disabled = true;
-  setTimeout(() => {
-    if (btn) btn.disabled = false;
-  }, 300);
-
-  const scrollState = capturePlanillaScrollState();
-
-  let res = CACHE.get("Resultados_Razas") || [];
-  const inscripciones = CACHE.get("Catalogo_Perros_Inscriptos") || [];
-  const sexosCatalogo = CACHE.get("Catalogo_Sexos") || [];
-  const nP = normalizeID(idP);
-  const nJ = normalizeID(idJ);
-  const nE = normalizeID(idE);
-  const perroActual = inscripciones.find(
-    (i) => normalizeID(i.IDInscripcion) === nP,
+  let registro = resultados.find(
+    (r) =>
+      normalizeID(r.IDInscripcion) === nP &&
+      normalizeID(r.IDJuez) === nJ &&
+      normalizeID(r.IDEvento) === nE,
   );
 
-  const jueces = CACHE.get("Jueces") || [];
-  const juezActual = jueces.find((j) => normalizeID(j.IDJuez) === nJ);
-  const esLimitada =
-    String(juezActual?.TipoJuez || "GENERAL").toUpperCase() === "LIMITADA";
-
-  // VALIDACIÓN DE UNICIDAD PARA PUESTOS (1° al 7°)
-  // Regla corregida:
-  // mismo evento + mismo juez + mismo puesto + misma raza + misma categoría + mismo sexo.
-  // Esto permite 1° macho y 1° hembra en la misma raza/categoría.
-  if (
-    false &&
-    !esMulti &&
-    campo === "Puesto" &&
-    ["1", "2", "3", "4", "5", "6", "7"].includes(String(val))
-  ) {
-    if (perroActual) {
-      const conflicto = res.find(
-        (r) =>
-          normalizeID(r.IDEvento) === nE &&
-          normalizeID(r.IDJuez) === nJ &&
-          normalizeID(r.Puesto) === String(val) &&
-          normalizeID(r.IDInscripcion) !== nP &&
-          (() => {
-            const otro = inscripciones.find(
-              (i) =>
-                normalizeID(i.IDInscripcion) === normalizeID(r.IDInscripcion),
-            );
-            return (
-              otro &&
-              String(otro.IDRaza) === String(perroActual.IDRaza) &&
-              String(otro.IDCategoria) === String(perroActual.IDCategoria) &&
-              String(otro.IDSexo) === String(perroActual.IDSexo)
-            );
-          })(),
-      );
-
-      if (conflicto) {
-        const otroPerro = inscripciones.find(
-          (i) =>
-            normalizeID(i.IDInscripcion) ===
-            normalizeID(conflicto.IDInscripcion),
-        );
-        alert(
-          `¡ACCIÓN DENEGADA!\n\n` +
-            `Ya existe un ${val}° Puesto asignado al perro #${otroPerro?.NumeroCatalogo || "??"} ` +
-            `en esta misma Raza, Categoría y Sexo.\n\n` +
-            `Debe desmarcar el ganador anterior antes de asignar uno nuevo.`,
-        );
-        return;
-      }
-    }
-  }
-
-  let rec = res.find(
-    (x) =>
-      normalizeID(x.IDInscripcion) === nP &&
-      normalizeID(x.IDJuez) === nJ &&
-      normalizeID(x.IDEvento) === nE,
-  );
-
-  if (!rec) {
-    rec = {
+  if (!registro) {
+    registro = {
       IDResultado: "TEMP_" + Date.now(),
-      IDInscripcion: idP,
-      IDJuez: idJ,
-      IDEvento: idE,
+      IDInscripcion: idInscripcion,
+      IDJuez: idJuez,
+      IDEvento: idEvento,
       Calificacion: "",
       Puesto: "",
-      Ausente: false,
-      TipoCompetencia: esLimitada ? "LIMITADA" : "GENERAL",
-      RolesFinalRaza: "",
       Titulo_Ganado: "",
+      RolesFinalRaza: "",
     };
-    res.push(rec);
+    resultados.push(registro);
   }
 
-  // Asegurar TipoCompetencia también en registros viejos
-  if (!rec.TipoCompetencia) {
-    rec.TipoCompetencia = esLimitada ? "LIMITADA" : "GENERAL";
-  }
-
-  const roleRecordsToSave = [];
-  const recordsExtraToSave = [];
-  const requiereRefreshPanelDerecho = [
-    "Puesto",
-    "Calificacion",
-    "Ausente",
-    "RolesFinalRaza",
-  ].includes(campo);
-
-  // --- AUSENTE ---
-  if (campo === "Ausente") {
-    const markingAusente = isTruthy(val);
-    rec.Ausente = markingAusente;
-
-    if (markingAusente) {
-      // Limpiar resultados al marcar como ausente
-      rec.Calificacion = "AUS";
-      rec.Puesto = "";
-      rec.Titulo_Ganado = "";
-      rec.RolesFinalRaza = "";
-    } else if (String(rec.Calificacion || "").toUpperCase() === "AUS") {
-      rec.Calificacion = "";
-    }
-
-    updatePlanillaPerroVisual(btn, campo, rec);
-  } else {
-    // Carga normal de resultados
-    if (esMulti) {
-      let tArr = (rec[campo] || "")
-        .split(", ")
-        .map((s) => s.trim())
-        .filter(Boolean);
-
-      if (campo === "RolesFinalRaza" && !tArr.includes(val)) {
-        if (perroActual) {
-          res.forEach((otroRec) => {
-            if (
-              otroRec !== rec &&
-              normalizeID(otroRec.IDEvento) === nE &&
-              normalizeID(otroRec.IDJuez) === nJ &&
-              multiHas(otroRec.RolesFinalRaza, val)
-            ) {
-              const otroPerro = inscripciones.find(
-                (i) =>
-                  normalizeID(i.IDInscripcion) ===
-                  normalizeID(otroRec.IDInscripcion),
-              );
-              if (
-                otroPerro &&
-                String(otroPerro.IDRaza) === String(perroActual.IDRaza)
-              ) {
-                const nuevosRoles = splitMulti(otroRec.RolesFinalRaza).filter(
-                  (x) => x !== val,
-                );
-                otroRec.RolesFinalRaza = nuevosRoles.join(", ");
-                limpiarDerivadosInvalidosParaPerro(otroRec, {
-                  perro: otroPerro,
-                  sexos: sexosCatalogo,
-                });
-                roleRecordsToSave.push(otroRec);
-              }
-            }
-          });
-        }
-      }
-
-      const agregandoRol = !tArr.includes(val);
-
-      if (tArr.includes(val)) {
-        tArr = tArr.filter((x) => x !== val);
-        btn.classList.remove("active", "multi");
-      } else {
-        tArr.push(val);
-        btn.classList.add("active", "multi");
-      }
-
-      rec[campo] = tArr.join(", ");
-      limpiarDerivadosInvalidosParaPerro(rec, {
-        perro: perroActual,
-        sexos: sexosCatalogo,
-      });
-      if (campo === "RolesFinalRaza") {
-        if (agregandoRol && TITULO_GANADO_POR_ROL_FINAL_RAZA[val]) {
-          rec.Titulo_Ganado = TITULO_GANADO_POR_ROL_FINAL_RAZA[val];
-        } else {
-          actualizarTituloGanadoResultadoRaza(rec);
-        }
-      }
+  if (esMulti) {
+    let actuales = splitMulti(registro[campo]);
+    if (actuales.includes(valor)) {
+      actuales = actuales.filter((v) => v !== valor);
     } else {
-      const valorActualCampo = String(rec[campo] || "");
-      const nuevoValor =
-        ["Puesto", "Calificacion"].includes(campo) &&
-        valorActualCampo === String(val)
-          ? ""
-          : String(val);
-
-      if (campo === "Puesto" && nuevoValor && perroActual) {
-        res.forEach((otroRec) => {
-          if (
-            otroRec !== rec &&
-            normalizeID(otroRec.IDEvento) === nE &&
-            normalizeID(otroRec.IDJuez) === nJ &&
-            String(otroRec.Puesto || "") === nuevoValor
-          ) {
-            const otroPerro = inscripciones.find(
-              (i) =>
-                normalizeID(i.IDInscripcion) ===
-                normalizeID(otroRec.IDInscripcion),
-            );
-            if (
-              otroPerro &&
-              String(otroPerro.IDRaza) === String(perroActual.IDRaza) &&
-              mismaFilaOficialPlanilla(otroPerro, perroActual, sexosCatalogo)
-            ) {
-              otroRec.Puesto = "";
-              limpiarDerivadosResultadoRaza(otroRec);
-              recordsExtraToSave.push(otroRec);
-            }
-          }
-        });
-
-        const filaDom = btn.closest("tr");
-        if (filaDom) {
-          filaDom
-            .querySelectorAll(".linea-puestos .btn-xs.active")
-            .forEach((b) => {
-              if (b !== btn && b.textContent.replace(/\D/g, "") === nuevoValor)
-                b.classList.remove("active");
-            });
-        }
-      }
-
-      const parent = btn.parentElement;
-      if (parent) {
-        parent
-          .querySelectorAll(".btn-xs")
-          .forEach((b) => b.classList.remove("active"));
-      }
-
-      if (nuevoValor) btn.classList.add("active");
-      rec[campo] = nuevoValor;
-
-      limpiarDerivadosInvalidosParaPerro(rec, {
-        perro: perroActual,
-        sexos: sexosCatalogo,
-      });
-
-      const card = btn.closest(".dog-card-compact");
-      if (card && campo === "Puesto") {
-        card.style.borderLeftColor = nuevoValor === "1" ? "#27ae60" : "#bdc3c7";
-      }
+      actuales.push(valor);
     }
+    registro[campo] = actuales.join(", ");
+  } else {
+    registro[campo] = valor;
   }
 
-  CACHE.set("Resultados_Razas", res);
+  CACHE.set("Resultados_Razas", resultados);
 
-  if (
-    requiereRefreshPanelDerecho &&
-    $("panelJuzgamiento")?.querySelector(".planilla-oficial")
-  ) {
-    refreshPlanillaDerechaDebounced(90, scrollState);
+  const payload = {
+    IDResultado: registro.IDResultado,
+    IDInscripcion: registro.IDInscripcion,
+    IDJuez: registro.IDJuez,
+    IDEvento: registro.IDEvento,
+    Calificacion: registro.Calificacion,
+    Puesto: registro.Puesto,
+    Titulo_Ganado: registro.Titulo_Ganado,
+    RolesFinalRaza: registro.RolesFinalRaza,
+  };
+
+  const isTemp = String(registro.IDResultado).startsWith("TEMP_");
+
+  const body = {
+    key: CONFIG.API_KEY,
+    table: "Resultados_Razas",
+    action: isTemp ? "create" : "update",
+    id: registro.IDResultado,
+    payload,
+  };
+
+  const resp = await fetch(CONFIG.API_URL, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+
+  const data = await resp.json();
+
+  if (data.ok && isTemp) {
+    registro.IDResultado = data.id;
+    CACHE.set("Resultados_Razas", resultados);
   }
 
-  Array.from(new Set([...roleRecordsToSave, ...recordsExtraToSave])).forEach(
-    (otroRec) => {
-      const otherKey = `raza_${normalizeID(otroRec.IDInscripcion)}_${normalizeID(otroRec.IDEvento)}_${normalizeID(otroRec.IDJuez)}`;
-      if (pendingTimers.has(otherKey)) {
-        clearTimeout(pendingTimers.get(otherKey));
-      }
-      pendingTimers.set(
-        otherKey,
-        setTimeout(async () => {
-          const isTempOther = String(otroRec.IDResultado || "").startsWith(
-            "TEMP_",
-          );
-          const payloadOther = { ...otroRec };
-          if (isTempOther) delete payloadOther.IDResultado;
-          try {
-            const servidor = await api(
-              "POST",
-              {},
-              {
-                action: isTempOther ? "create" : "update",
-                table: "Resultados_Razas",
-                payload: payloadOther,
-                id: isTempOther ? null : otroRec.IDResultado,
-              },
-            );
-            if (servidor && servidor.id) {
-              otroRec.IDResultado = servidor.id;
-              CACHE.set("Resultados_Razas", res);
-            }
-          } catch (e2) {
-            setStatus("Error al limpiar rol duplicado: " + e2.message, true);
-          }
-        }, TIEMPO_ESPERA_GUARDADO),
-      );
-    },
-  );
-
-  const timerKey = `raza_${nP}_${nE}_${nJ}`;
-  if (pendingTimers.has(timerKey)) {
-    clearTimeout(pendingTimers.get(timerKey));
+  const ctx = getPlanillaFinalesContextoActual?.();
+  if (ctx) {
+    ctx.aside.innerHTML = renderPlanillaFinalesHTML(
+      ctx.perrosRaza,
+      ctx.sexos,
+      ctx.juezId,
+      ctx.idEventoActivo,
+      ctx.esLimitada,
+      CACHE.get("Resultados_Razas") || [],
+    );
   }
-
-  pendingTimers.set(
-    timerKey,
-    setTimeout(async () => {
-      setStatus("Sincronizando...");
-
-      const isTemp = String(rec.IDResultado).startsWith("TEMP_");
-      const payload = { ...rec };
-
-      if (isTemp) {
-        delete payload.IDResultado;
-      }
-
-      try {
-        const servidor = await api(
-          "POST",
-          {},
-          {
-            action: isTemp ? "create" : "update",
-            table: "Resultados_Razas",
-            payload,
-            id: isTemp ? null : rec.IDResultado,
-          },
-        );
-
-        if (servidor && servidor.id) {
-          rec.IDResultado = servidor.id;
-          CACHE.set("Resultados_Razas", res);
-        }
-
-        setStatus("Guardado OK.");
-      } catch (e) {
-        setStatus("Error al guardar: " + e.message, true);
-      }
-    }, TIEMPO_ESPERA_GUARDADO),
-  );
 };
 
 function verificarAcceso() {
