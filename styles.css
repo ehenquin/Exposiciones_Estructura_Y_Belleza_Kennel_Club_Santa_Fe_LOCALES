@@ -1,7 +1,605 @@
 /* =========================
    BASE Y LAYOUT
 ========================= */
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
+
+/* =========================
+   PLANILLA OFICIAL DIGITAL
+========================= */
+#viewPistas {
+  color: #18212f;
+}
+
+#viewPistas .planilla-shell {
+  width: 100%;
+}
+
+#viewPistas .planilla-toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(360px, 2.4fr);
+  gap: 10px;
+  align-items: end;
+  padding: 10px;
+  border: 1px solid #d8dee7;
+  background: #f7f9fb;
+  border-radius: 6px;
+}
+
+#viewPistas .planilla-jueces,
+#viewPistas .rowbuttons-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+#viewPistas .planilla-count {
+  margin-top: 6px;
+  color: #5b6675;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+#viewPistas .planilla-cronograma {
+  margin: 8px 0;
+  color: #667085;
+}
+
+#viewPistas .planilla-oficial {
+  border: 1px solid #cfd6df;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#viewPistas .planilla-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 14px;
+  background: #263241;
+  color: #fff;
+}
+
+#viewPistas .planilla-head h2 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+
+#viewPistas .planilla-head p {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #dbe3ec;
+}
+
+#viewPistas .planilla-badge {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  font-weight: 800;
+}
+
+#viewPistas .planilla-filtros {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(320px, 2fr);
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e9ef;
+  background: #fbfcfd;
+}
+
+#viewPistas .planilla-alert {
+  padding: 8px 12px;
+  background: #fff4d6;
+  border-bottom: 1px solid #efd18a;
+  color: #6c4a00;
+  font-weight: 800;
+}
+
+#viewPistas .planilla-workgrid {
+  display: grid;
+  grid-template-columns: minmax(620px, 1fr) 360px;
+}
+
+#viewPistas .planilla-tabla-wrap {
+  overflow-x: auto;
+  border-right: 1px solid #d8dee7;
+}
+
+#viewPistas .planilla-tabla {
+  margin: 0;
+  min-width: 760px;
+}
+
+#viewPistas .planilla-tabla th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #eef2f6;
+  color: #263241;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+#viewPistas .planilla-tabla td {
+  padding: 6px;
+  vertical-align: top;
+}
+
+#viewPistas .planilla-tabla .col-cat {
+  width: 190px;
+}
+
+#viewPistas .planilla-cat {
+  font-weight: 800;
+  color: #2f3a49;
+  line-height: 1.25;
+}
+
+#viewPistas .planilla-cat span {
+  display: inline-flex;
+  width: 28px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  background: #dfe7f0;
+  border-radius: 4px;
+  color: #152033;
+}
+
+#viewPistas .fila-vacia {
+  background: #fafafa;
+}
+
+#viewPistas .planilla-bloque-row td {
+  border-top-color: rgba(15, 23, 42, 0.08);
+}
+
+#viewPistas .planilla-bloque-row .planilla-cat {
+  border-left: 6px solid transparent;
+}
+
+#viewPistas .bloque-cachorros-especiales-m,
+#viewPistas .bloque-cachorros-m {
+  background: #eef7f0;
+}
+
+#viewPistas .bloque-cachorros-especiales-m .planilla-cat,
+#viewPistas .bloque-cachorros-m .planilla-cat {
+  background: #dbeee1;
+  border-left-color: #2f6f45;
+}
+
+#viewPistas .bloque-cachorros-especiales-h,
+#viewPistas .bloque-cachorros-h {
+  background: #f6fbf4;
+}
+
+#viewPistas .bloque-cachorros-especiales-h .planilla-cat,
+#viewPistas .bloque-cachorros-h .planilla-cat {
+  background: #e8f5e5;
+  border-left-color: #7fb77a;
+}
+
+#viewPistas .bloque-jovenes-m {
+  background: #fbf0f0;
+}
+
+#viewPistas .bloque-jovenes-m .planilla-cat {
+  background: #f1dada;
+  border-left-color: #9b3434;
+}
+
+#viewPistas .bloque-jovenes-h {
+  background: #fff7f7;
+}
+
+#viewPistas .bloque-jovenes-h .planilla-cat {
+  background: #f8e7e7;
+  border-left-color: #d98686;
+}
+
+#viewPistas .bloque-adultos-m {
+  background: #eef4fb;
+}
+
+#viewPistas .bloque-adultos-m .planilla-cat {
+  background: #dbe7f5;
+  border-left-color: #2f5f93;
+}
+
+#viewPistas .bloque-adultos-h {
+  background: #f6faff;
+}
+
+#viewPistas .bloque-adultos-h .planilla-cat {
+  background: #e6f0fb;
+  border-left-color: #7fa9d6;
+}
+
+#viewPistas .bloque-veteranos-m {
+  background: #fbf7e8;
+}
+
+#viewPistas .bloque-veteranos-m .planilla-cat {
+  background: #f1e4b8;
+  border-left-color: #9a7b20;
+}
+
+#viewPistas .bloque-veteranos-h {
+  background: #fffbed;
+}
+
+#viewPistas .bloque-veteranos-h .planilla-cat {
+  background: #f8efc8;
+  border-left-color: #d1b85f;
+}
+
+#viewPistas .planilla-tabla .bloque-top-thick td {
+  border-top: 4px solid #344054;
+}
+
+#viewPistas .planilla-tabla .bloque-sexo-divider td {
+  border-top: 2px solid rgba(52, 64, 84, 0.42);
+}
+
+#viewPistas .planilla-tabla .bloque-top-thick .planilla-cat {
+  box-shadow: inset 0 4px 0 rgba(52, 64, 84, 0.18);
+}
+
+#viewPistas .planilla-tabla .bloque-sexo-divider .planilla-cat {
+  box-shadow: inset 0 2px 0 rgba(52, 64, 84, 0.12);
+}
+
+#viewPistas .planilla-empty {
+  color: #8a94a3;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+#viewPistas .planilla-perro {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 6px 8px;
+  padding: 6px;
+  border: 1px solid #e1e6ed;
+  border-radius: 4px;
+  background: #fff;
+}
+
+#viewPistas .planilla-perro + .planilla-perro {
+  margin-top: 6px;
+}
+
+#viewPistas .perro-id {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  color: #4b5563;
+}
+
+#viewPistas .dog-num {
+  font-size: 18px;
+  font-weight: 900;
+  color: #111827;
+}
+
+#viewPistas .perro-id b {
+  color: #b42318;
+}
+
+#viewPistas .planilla-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+}
+
+#viewPistas .btn-xs {
+  min-height: 30px;
+  min-width: 38px;
+  padding: 4px 8px;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  font-weight: 800;
+}
+
+#viewPistas .calif-btn {
+  border-color: #54708f !important;
+}
+
+#viewPistas .btn-aus {
+  border-color: #cc5f5a !important;
+  color: #922018 !important;
+}
+
+#viewPistas .planilla-finales {
+  padding: 10px;
+  background: #fbfcfd;
+  max-height: calc(100vh - 230px);
+  overflow: auto;
+}
+
+#viewPistas .planilla-finales h3 {
+  margin: 4px 0 8px 0;
+  font-size: 14px;
+  color: #263241;
+  text-transform: uppercase;
+}
+
+#viewPistas .final-rol,
+#viewPistas .grupo-pass {
+  padding: 8px;
+  margin-bottom: 7px;
+  border: 1px solid #dce2ea;
+  border-radius: 4px;
+  background: #fff;
+}
+
+#viewPistas .finales-raza-bloque {
+  margin: 10px 0 12px 0;
+  padding: 8px 8px 1px 8px;
+  border-top: 4px solid #344054;
+  border-radius: 4px;
+}
+
+#viewPistas .finales-raza-bloque-title {
+  margin: 0 0 7px 0;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #263241;
+}
+
+#viewPistas .finales-simples-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+#viewPistas .finales-raza-bloque-simple {
+  margin: 0;
+  padding: 7px;
+}
+
+#viewPistas .finales-raza-bloque-simple .final-rol {
+  padding: 6px;
+  margin-bottom: 5px;
+}
+
+#viewPistas .finales-raza-bloque-simple .final-title {
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+
+#viewPistas .derivado-bloque {
+  margin: 10px 0 12px 0;
+  padding: 8px;
+  border-top: 4px solid #344054;
+  border-radius: 4px;
+  background: #fff;
+}
+
+#viewPistas .derivado-bloque-title {
+  margin: 0 0 7px 0;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #263241;
+}
+
+#viewPistas .derivado-row {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 6px;
+  align-items: center;
+  padding: 5px 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.32);
+}
+
+#viewPistas .derivado-row:first-of-type {
+  border-top: 0;
+}
+
+#viewPistas .derivado-label {
+  font-size: 10px;
+  font-weight: 900;
+  color: #344054;
+}
+
+#viewPistas .derivado-candidatos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+#viewPistas .derivado-jovenes-m {
+  background: #fbf0f0;
+  border-top-color: #9b3434;
+}
+
+#viewPistas .derivado-jovenes-h {
+  background: #fff7f7;
+  border-top-color: #d98686;
+}
+
+#viewPistas .derivado-adultos-m {
+  background: #eef4fb;
+  border-top-color: #2f5f93;
+}
+
+#viewPistas .derivado-adultos-h {
+  background: #f6faff;
+  border-top-color: #7fa9d6;
+}
+
+#viewPistas .bloque-finales-cachorro-especial {
+  background: #f0f8f2;
+  border-top-color: #2f6f45;
+}
+
+#viewPistas .bloque-finales-cachorro {
+  background: #f6fbf4;
+  border-top-color: #7fb77a;
+}
+
+#viewPistas .bloque-finales-joven {
+  background: #fff5f5;
+  border-top-color: #9b3434;
+}
+
+#viewPistas .bloque-finales-adulto {
+  background: #f2f7fd;
+  border-top-color: #2f5f93;
+}
+
+#viewPistas .bloque-finales-veterano {
+  background: #fff9e8;
+  border-top-color: #9a7b20;
+}
+
+#viewPistas .panel-derecho-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+#viewPistas .bloque-operativo {
+  display: grid;
+  gap: 7px;
+  padding: 7px;
+  border-top: 4px solid #344054;
+  border-radius: 4px;
+}
+
+#viewPistas .bloque-operativo-jovenes {
+  background: #fff7f7;
+  border-top-color: #9b3434;
+}
+
+#viewPistas .bloque-operativo-adultos {
+  background: #f2f7fd;
+  border-top-color: #2f5f93;
+}
+
+#viewPistas .bloque-operativo-title {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #263241;
+  letter-spacing: 0;
+}
+
+#viewPistas .bloque-operativo-subgrid {
+  display: grid;
+  gap: 6px;
+}
+
+#viewPistas .bloque-operativo .derivado-bloque,
+#viewPistas .bloque-operativo .finales-raza-bloque {
+  margin: 0;
+  padding: 6px;
+}
+
+#viewPistas .bloque-operativo .finales-raza-bloque-operativo .final-rol {
+  padding: 5px 6px;
+  margin-bottom: 5px;
+}
+
+@media (min-width: 1320px) {
+  #viewPistas .planilla-workgrid {
+    grid-template-columns: minmax(0, 1fr) 500px !important;
+  }
+
+  #viewPistas .panel-derecho-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+#viewPistas .final-title {
+  margin-bottom: 6px;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+#viewPistas .final-candidatos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+#viewPistas .grupo-pass strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+#viewPistas .is-ausente {
+  opacity: 0.62;
+  background: #fff7f6;
+}
+
+@media (max-width: 980px) {
+  #viewPistas .planilla-toolbar,
+  #viewPistas .planilla-filtros,
+  #viewPistas .planilla-workgrid {
+    grid-template-columns: 1fr;
+  }
+
+  #viewPistas .finales-simples-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #viewPistas .planilla-tabla-wrap {
+    border-right: 0;
+    border-bottom: 1px solid #d8dee7;
+  }
+
+  #viewPistas .planilla-finales {
+    max-height: none;
+  }
+}
+
+/* Overrides finales de Planilla Oficial Digital sobre estilos viejos de Pistas Razas. */
+#viewPistas .planilla-oficial .btn-xs {
+  min-height: 30px !important;
+  min-width: 38px !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+#viewPistas .planilla-oficial .grupo-pass .btn-xs {
+  height: auto !important;
+  min-height: 28px !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+}
+
+#viewPistas .planilla-oficial .planilla-head h2 {
+  color: #fff !important;
+}
+
+@media (max-width: 640px) {
+  #viewPistas .planilla-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #viewPistas .planilla-perro {
+    grid-template-columns: 1fr;
+  }
+
+}
 
 body {
   font-family: sans-serif;
@@ -15,13 +613,17 @@ body {
   padding: 20px;
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}
 
 /* util */
-.is-hidden { display: none !important; }
+.is-hidden {
+  display: none !important;
+}
 
 /* =========================
    HEADER
@@ -38,11 +640,13 @@ header h1 {
 }
 
 @media (max-width: 600px) {
-  header h1 { font-size: 18px; }
+  header h1 {
+    font-size: 18px;
+  }
 }
 
 /* =========================
-   NAVEGACIÓN Y TABS
+   NAVEGACIÃ“N Y TABS
 ========================= */
 .nav {
   display: flex;
@@ -68,8 +672,13 @@ header h1 {
 }
 
 /* (para el HTML nuevo; si no existen no molestan) */
-.tab-grupos { color: gold; font-weight: bold; }
-.tab-bis { background: #fff3cd; color: #856404; font-weight: bold; border: 1px solid #ffeeba; }
+
+.tab-bis {
+  background: #fff3cd;
+  color: #856404;
+  font-weight: bold;
+  border: 1px solid #ffeeba;
+}
 
 /* =========================
    GRILLAS / TARJETAS / TOOLBAR
@@ -102,16 +711,21 @@ table {
   margin-top: 10px;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
   font-size: 13px;
 }
 
-th { background: #f8f8f8; }
+th {
+  background: #f8f8f8;
+}
 
-.field { margin-bottom: 10px; }
+.field {
+  margin-bottom: 10px;
+}
 
 label {
   display: block;
@@ -120,7 +734,8 @@ label {
   margin-bottom: 4px;
 }
 
-input, select {
+input,
+select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -128,14 +743,33 @@ input, select {
 }
 
 /* clases del HTML nuevo */
-.filter-row { margin-bottom: 10px; display: flex; gap: 5px; }
-.filter-select { flex: 1; }
+.filter-row {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 5px;
+}
 
-.form-row { margin-bottom: 10px; }
-.form-label-strong { display:block; font-weight:600; margin-bottom:6px; }
+.filter-select {
+  flex: 1;
+}
 
-.muted { color: #666; }
-.hint-muted { color: gray; }
+.form-row {
+  margin-bottom: 10px;
+}
+
+.form-label-strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.muted {
+  color: #666;
+}
+
+.hint-muted {
+  color: gray;
+}
 
 .field-highlight {
   background: #f0f4f8;
@@ -144,9 +778,15 @@ input, select {
   border: 1px solid #d1d9e0;
 }
 
-.select-strong { width: 100%; padding: 8px; font-weight: bold; }
+.select-strong {
+  width: 100%;
+  padding: 8px;
+  font-weight: bold;
+}
 
-.cronograma-small { font-size: 11px; }
+.cronograma-small {
+  font-size: 11px;
+}
 
 /* =========================
    BOTONES GENERALES
@@ -172,17 +812,26 @@ input, select {
   border: none;
 }
 
-.hidden-on-load { display: none; }
+.hidden-on-load {
+  display: none;
+}
 
-.actions { display: flex; gap: 10px; }
+.actions {
+  display: flex;
+  gap: 10px;
+}
 
 /* PISTAS RAZAS - Botones Pista cobre */
 #viewPistas .btn.primary {
-  background: linear-gradient(180deg,#d4874a 0%,#b87333 70%,#8a4b1c 100%) !important;
+  background: linear-gradient(
+    180deg,
+    #d4874a 0%,
+    #b87333 70%,
+    #8a4b1c 100%
+  ) !important;
   border: 1px solid #6f3b15 !important;
   color: #fff !important;
 }
-
 
 /* =========================
    STATUS
@@ -213,28 +862,76 @@ input, select {
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.btn-opt:hover { background: #f8f9fa; border-color: #adb5bd; }
+.btn-opt:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
 
 /* Activos */
 .btn-juez-pista.active,
 .btn-juez-grupo.active,
 .btn-opt.active {
-  background: linear-gradient(180deg,#d4874a 0%,#b87333 70%,#8a4b1c 100%) !important;
+  background: linear-gradient(
+    180deg,
+    #d4874a 0%,
+    #b87333 70%,
+    #8a4b1c 100%
+  ) !important;
   color: #fff !important;
   border-color: #6f3b15 !important;
   font-weight: bold;
-  box-shadow: 0 4px 8px rgba(184,115,51,.35) !important;
+  box-shadow: 0 4px 8px rgba(184, 115, 51, 0.35) !important;
 }
 
-/* Multi (si lo usás) */
+/* Multi (si lo usÃ¡s) */
 .btn-opt.multi.active {
   background: #28a745 !important;
   color: #fff !important;
   border-color: #1e7e34 !important;
-  box-shadow: 0 0 8px rgba(40,167,69,0.40);
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.4);
+}
+
+#insCatBtns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.local-cat-section {
+  border: 1px solid #dde2e8;
+  border-radius: 6px;
+  padding: 8px;
+  background: #f8fafc;
+}
+
+.local-cat-title {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.local-cat-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.local-cat-options-horizontal .btn-opt {
+  flex: 1 1 130px;
+}
+
+.local-sex-options .btn-opt {
+  flex: 0 1 140px;
+}
+
+.local-cat-base-btn,
+.local-sex-btn {
+  text-align: center;
 }
 
 /* =========================
@@ -305,9 +1002,15 @@ input, select {
   gap: 5px;
 }
 
-.dog-ident { font-size: 1.1em; font-weight: bold; }
+.dog-ident {
+  font-size: 1.1em;
+  font-weight: bold;
+}
 
-.btn-group-inline { display: flex; gap: 2px; }
+.btn-group-inline {
+  display: flex;
+  gap: 2px;
+}
 
 .btn-xs {
   padding: 4px 8px;
@@ -387,7 +1090,7 @@ input, select {
   border-color: #d4af37;
 }
 
-/* botón BIS “open” */
+/* botÃ³n BIS â€œopenâ€ */
 .btn-bis-open {
   width: 100%;
   margin-top: 15px;
@@ -401,7 +1104,8 @@ input, select {
 ========================= */
 #splashScreen {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: #fff;
@@ -412,10 +1116,24 @@ input, select {
   transition: opacity 0.6s ease;
 }
 
-#splashScreen.hidden { opacity: 0; visibility: hidden; }
+#splashScreen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
 
-.splash-content { text-align: center; width: 90%; max-width: 400px; }
-.splash-logo { width: 100%; max-width: 280px; height: auto; margin-bottom: 25px; border-radius: 8px; }
+.splash-content {
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+}
+
+.splash-logo {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin-bottom: 25px;
+  border-radius: 8px;
+}
 
 .splash-main-title {
   font-family: sans-serif;
@@ -428,59 +1146,153 @@ input, select {
   letter-spacing: 1px;
 }
 
-.loading-bar-container { width: 100%; height: 6px; background: #f0f0f0; border-radius: 10px; overflow: hidden; }
-.loading-bar { width: 40%; height: 100%; background: #2c3e50; animation: loadingProgress 1.5s infinite ease-in-out; }
-
-@keyframes loadingProgress {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(250%); }
+.loading-bar-container {
+  width: 100%;
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.loading-text { margin-top: 15px; font-size: 14px; color: #888; }
-.splash-footer { margin-top: 40px; font-size: 12px; color: #aaa; }
+.loading-bar {
+  width: 40%;
+  height: 100%;
+  background: #2c3e50;
+  animation: loadingProgress 1.5s infinite ease-in-out;
+}
+
+@keyframes loadingProgress {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.loading-text {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #888;
+}
+
+.splash-footer {
+  margin-top: 40px;
+  font-size: 12px;
+  color: #aaa;
+}
 
 /* =========================
    RESPONSIVE
 ========================= */
-#contCatalogos, table { overflow-x: auto; }
-#contCatalogos table { min-width: 520px; }
+#contCatalogos,
+table {
+  overflow-x: auto;
+}
+
+#contCatalogos table {
+  min-width: 520px;
+}
 
 @media (max-width: 900px) {
-  .wrap { margin: 0; border-radius: 0; }
-  .grid { grid-template-columns: 1fr; }
+  .wrap {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 600px) {
-  .wrap { padding: 12px; }
-  .toolbar { flex-direction: column; }
-  .toolbar select, .toolbar button { width: 100%; }
+  .wrap {
+    padding: 12px;
+  }
 
-  .nav { gap: 8px; margin: 12px 0; }
-  .tab { padding: 10px 12px; width: 100%; text-align: center; }
+  .toolbar {
+    flex-direction: column;
+  }
 
-  .btn { width: 100%; }
-  .actions { flex-direction: column; gap: 8px; }
+  .toolbar select,
+  .toolbar button {
+    width: 100%;
+  }
 
-  input, select { font-size: 16px; }
-  .btn-opt { width: 100%; justify-content: center; }
-  .btn-group { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .nav {
+    gap: 8px;
+    margin: 12px 0;
+  }
 
-  .btn-group-inline { flex-wrap: wrap; }
-  .dog-flex-row { flex-direction: column; align-items: flex-start; }
+  .tab {
+    padding: 10px 12px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  input,
+  select {
+    font-size: 16px;
+  }
+
+  .btn-opt {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  #insCatBtns {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-group-inline {
+    flex-wrap: wrap;
+  }
+
+  .dog-flex-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* =========================
-   EFECTO CONFLICTO (si lo usás)
+   EFECTO CONFLICTO (si lo usÃ¡s)
 ========================= */
 @keyframes warningFlash {
-  0% { background-color: transparent; }
-  50% { background-color: #ffcccc; }
-  100% { background-color: transparent; }
+  0% {
+    background-color: transparent;
+  }
+
+  50% {
+    background-color: #ffcccc;
+  }
+
+  100% {
+    background-color: transparent;
+  }
 }
-.conflict-flash { animation: warningFlash 0.8s ease-in-out; }
+
+.conflict-flash {
+  animation: warningFlash 0.8s ease-in-out;
+}
 
 /* =========================
-   JUECES: banderas (si lo usás)
+   JUECES: banderas (si lo usÃ¡s)
 ========================= */
 .judge-country {
   display: inline-flex;
@@ -491,11 +1303,15 @@ input, select {
   margin-top: 4px;
   opacity: 0.95;
 }
-.judge-flag { font-size: 16px; line-height: 1; }
+
+.judge-flag {
+  font-size: 16px;
+  line-height: 1;
+}
 
 /* =============================================================================
    INSCRIPCIONES: RAZA + ITEM PERRO (MEJORADO)
-   (NO TOCADO — solo reubicado con orden visual)
+   (NO TOCADO â€” solo reubicado con orden visual)
    ============================================================================= */
 
 /* 1) Encabezado de RAZA */
@@ -509,31 +1325,34 @@ input, select {
   letter-spacing: 0.6px;
   text-transform: uppercase;
   border-radius: 12px;
-  border: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 
-    0 6px 18px rgba(0,0,0,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.8);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 /* 2) Tarjeta de cada PERRO */
-#viewInscripciones .insc-item{
+#viewInscripciones .insc-item {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 10px 12px;
   margin-bottom: 8px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-  transition: transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease;
 }
 
-#viewInscripciones .insc-item:hover{
+#viewInscripciones .insc-item:hover {
   transform: translateY(-1px);
   border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Número (#1, #2, etc) */
-#viewInscripciones .insc-num{
+/* NÃºmero (#1, #2, etc) */
+#viewInscripciones .insc-num {
   display: inline-block;
   font-weight: 800;
   color: #111827;
@@ -544,17 +1363,16 @@ input, select {
   margin-right: 8px;
 }
 
-/* Descriptor “Macho | Cachorro” */
-#viewInscripciones .insc-meta{
+/* Descriptor â€œMacho | Cachorroâ€ */
+#viewInscripciones .insc-meta {
   color: #374151;
   font-weight: 600;
 }
 
 /* =========================================================
-   PISTAS RAZAS – COBRE EXACTO (estructura igual al ejemplo)
-   (ÚNICO bloque que toca esta pestaña)
+   PISTAS RAZAS â€“ COBRE EXACTO (estructura igual al ejemplo)
+   (ÃšNICO bloque que toca esta pestaÃ±a)
    ========================================================= */
-
 
 /* =========================================================
    esta parte la cambio el chat para forzar vista 1 col en celus
@@ -565,7 +1383,7 @@ input, select {
 }
    ========================================================= */
 
-#viewPistas .grid{
+#viewPistas .grid {
   display: grid !important;
   grid-template-columns: 480px 1fr !important;
   gap: 5px !important;
@@ -573,8 +1391,8 @@ input, select {
 }
 
 /* RESPONSIVE SOLO PARA PISTAS RAZAS */
-@media (max-width: 900px){
-  #viewPistas .grid{
+@media (max-width: 900px) {
+  #viewPistas .grid {
     grid-template-columns: 1fr !important;
   }
 }
@@ -582,155 +1400,150 @@ input, select {
 /* =========================================================
    ========================================================= */
 
-#viewPistas #panelJuzgamiento{
-  background:#fffaf5 !important;
-  border-radius:18px !important;
-  padding:22px !important;
-  border:1px solid rgba(184,115,51,.25) !important;
+#viewPistas #panelJuzgamiento {
+  background: #fffaf5 !important;
+  border-radius: 18px !important;
+  padding: 22px !important;
+  border: 1px solid rgba(184, 115, 51, 0.25) !important;
 }
 
 /* ===== CARD PERRO ===== */
 
 /*
 =============================================================================
-MÓDULO: PISTAS RAZAS - OPTIMIZACIÓN VISUAL (COBRE PRO)
+MÃ“DULO: PISTAS RAZAS - OPTIMIZACIÃ“N VISUAL (COBRE PRO)
 -----------------------------------------------------------------------------
-DESCRIPCIÓN: 
-Ajustes de compactación para mejorar la densidad de datos en pantalla y 
-jerarquización de categorías para una lectura rápida en pista.
+DESCRIPCIÃ“N: 
+Ajustes de compactaciÃ³n para mejorar la densidad de datos en pantalla y 
+jerarquizaciÃ³n de categorÃ­as para una lectura rÃ¡pida en pista.
 
 SECCIONES:
-1. ESTRUCTURA DE TARJETA: Reducción de padding y márgenes.
-2. ESPACIADO INTERNO: Ajuste de aire entre filas de calificación y títulos.
-3. BOTONERAS: Escalamiento hacia abajo para botones de Puesto, Calif y Títulos.
-4. CATEGORÍAS: Aumento de tamaño para headers (Cachorro, Adulto, etc.).
+1. ESTRUCTURA DE TARJETA: ReducciÃ³n de padding y mÃ¡rgenes.
+2. ESPACIADO INTERNO: Ajuste de aire entre filas de resultado.
+3. BOTONERAS: Escalamiento hacia abajo para botones de Puesto y Calif.
+4. CATEGORÃAS: Aumento de tamaÃ±o para headers (Cachorro, Adulto, etc.).
 =============================================================================
 
 
-/* 1) Tarjeta más baja (menos alto) */
-#viewPistas .dog-card-compact{
-  background:#ffffff !important;
-  border:1px solid rgba(184,115,51,.35) !important;
-  border-left:6px solid #b87333 !important;
-  border-radius:14px !important;
-  padding:10px 14px !important;  /* antes 16px 20px */
-  margin-bottom:10px !important; /* antes 14px */
-  display:flex !important;
-  flex-direction:column !important;
-  gap:10px !important; /* antes 14px */
+/* 1) Tarjeta mÃ¡s baja (menos alto) */
+#viewPistas .dog-card-compact {
+  background: #ffffff !important;
+  border: 1px solid rgba(184, 115, 51, 0.35) !important;
+  border-left: 6px solid #b87333 !important;
+  border-radius: 14px !important;
+  padding: 10px 14px !important;
+  /* antes 16px 20px */
+  margin-bottom: 10px !important;
+  /* antes 14px */
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  /* antes 14px */
 }
 
-
-/* 4) Categoría separadora más grande (Cachorro / Joven / Adulto, etc) */
-#viewPistas .list-cat-header{
-  font-size: 18px !important;     /* antes 16px global */
-  padding: 6px 12px !important;   /* un poco más de presencia */
+/* 4) CategorÃ­a separadora mÃ¡s grande (Cachorro / Joven / Adulto, etc) */
+#viewPistas .list-cat-header {
+  font-size: 18px !important;
+  /* antes 16px global */
+  padding: 6px 12px !important;
+  /* un poco mÃ¡s de presencia */
   font-weight: 800 !important;
 }
 
 /* ===== FILA SUPERIOR (# + texto + puestos) ===== */
 
-#viewPistas .dog-flex-row{
-  display:grid !important;
-  grid-template-columns:1fr auto !important;
-  align-items:center !important;
+#viewPistas .dog-flex-row {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  align-items: center !important;
 }
 
-#viewPistas .dog-flex-row > div:first-child{
-  display:flex !important;
-  align-items:baseline !important;
-  gap:10px !important;
-  font-weight:800 !important;
-  color:#3a1e0b !important;
+#viewPistas .dog-flex-row > div:first-child {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 10px !important;
+  font-weight: 800 !important;
+  color: #3a1e0b !important;
 }
 
-#viewPistas .puesto-btns{
-  display:flex !important;
-  gap:8px !important;
+#viewPistas .puesto-btns {
+  display: flex !important;
+  gap: 8px !important;
 }
 
-#viewPistas .puesto-btns .btn-xs{
-  width:38px !important;           /* BOTONES MAS CHICOS antes 40 */
-  height:38px !important;          /* BOTONES MAS CHICOS antes 40 */
-  border-radius:50% !important;
-  font-size:13px !important;       /* BOTONES MAS CHICOS antes 14 */  
-  font-weight:800 !important;
-  padding:0 !important;
+#viewPistas .puesto-btns .btn-xs {
+  width: 38px !important;
+  /* BOTONES MAS CHICOS antes 40 */
+  height: 38px !important;
+  /* BOTONES MAS CHICOS antes 40 */
+  border-radius: 50% !important;
+  font-size: 13px !important;
+  /* BOTONES MAS CHICOS antes 14 */
+  font-weight: 800 !important;
+  padding: 0 !important;
 }
 
-/* ===== FILA CALIFICACIÓN ===== */
+/* ===== FILA CALIFICACIÃ“N ===== */
 
 /* 2) Menos aire entre filas internas */
-#viewPistas .calif-row{
-  display:flex !important;
-  justify-content:flex-end !important;
-  align-items:center !important;
-  gap:10px !important; /* Menos aire entre filas internas antes antes 14px */
-  border-top:1px solid rgba(184,115,51,.15) !important;
-  padding-top:8px !important; /* Menos aire entre filas internas antes 10px */
+#viewPistas .calif-row {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 10px !important;
+  /* Menos aire entre filas internas antes antes 14px */
+  border-top: 1px solid rgba(184, 115, 51, 0.15) !important;
+  padding-top: 8px !important;
+  /* Menos aire entre filas internas antes 10px */
 }
 
-#viewPistas .calif-label{
-  font-size:11px !important;
-  font-weight:800 !important;
-  color:#b87333 !important;
-  text-transform:uppercase !important;
+#viewPistas .calif-label {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #b87333 !important;
+  text-transform: uppercase !important;
 }
 
-#viewPistas .btn-group-inline{
-  display:flex !important;
-  gap:8px !important;
+#viewPistas .btn-group-inline {
+  display: flex !important;
+  gap: 8px !important;
 }
 
-#viewPistas .btn-group-inline .btn-xs{
-  height:30px !important;               /* antes 32 */
-  min-width:38px !important;            /* antes 40 */
-  border-radius:8px !important;
-  font-size:11px !important;            /* antes 12 */
-  font-weight:800 !important;
-  padding:0 10px !important;
-}
-
-/* ===== FILA TÍTULOS ===== */
-
-#viewPistas .titulos-row{
-  display:flex !important;
-  flex-wrap:wrap !important;
-  gap:6px !important;
-  justify-content:flex-end !important;
-  border-top:1px dashed rgba(184,115,51,.2) !important;
-  padding-top:10px !important; /* antes 12px */
-}
-
-#viewPistas .titulos-row .btn-xs{
-  height:20px !important; /* 22 antes 24 */
-  padding:0 10px !important;   /*0 8 antes 0 10 */
-  font-size:8px !important; /* 9 antes 10 */
-  border-radius:14px !important;
-  font-weight:800 !important;
-  text-transform:uppercase !important;
-  min-width:auto !important;
+#viewPistas .btn-group-inline .btn-xs {
+  height: 30px !important;
+  /* antes 32 */
+  min-width: 38px !important;
+  /* antes 40 */
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  /* antes 12 */
+  font-weight: 800 !important;
+  padding: 0 10px !important;
 }
 
 /* ===== BOTONES BASE (solo en viewPistas) ===== */
 
-#viewPistas .btn-xs{
-  background:#fff !important;
-  border:1px solid rgba(184,115,51,.4) !important;
-  color:#3a1e0b !important;
-  transition:.2s !important;
+#viewPistas .btn-xs {
+  background: #fff !important;
+  border: 1px solid rgba(184, 115, 51, 0.4) !important;
+  color: #3a1e0b !important;
+  transition: 0.2s !important;
 }
 
-#viewPistas .btn-xs.active{
-  background:linear-gradient(180deg,#d4874a 0%,#b87333 70%,#8a4b1c 100%) !important;
-  color:#fff !important;
-  border-color:#6f3b15 !important;
-  box-shadow:0 4px 8px rgba(184,115,51,.3) !important;
+#viewPistas .btn-xs.active {
+  background: linear-gradient(
+    180deg,
+    #d4874a 0%,
+    #b87333 70%,
+    #8a4b1c 100%
+  ) !important;
+  color: #fff !important;
+  border-color: #6f3b15 !important;
+  box-shadow: 0 4px 8px rgba(184, 115, 51, 0.3) !important;
 }
-
 
 /* Destacar nombre de raza */
-#viewPistas .juzg-header-raza{
+#viewPistas .juzg-header-raza {
   font-size: 16px !important;
   font-weight: 800 !important;
   color: #6f3b15 !important;
@@ -741,167 +1554,41 @@ SECCIONES:
   margin: 10px 0 6px 0 !important;
 }
 
-
-
 /* TAB PISTAS RAZAS - estilo cobre */
-#navPistas.active{
-  background: linear-gradient(180deg,#d4874a 0%,#b87333 70%,#8a4b1c 100%) !important;
-  border-color:#6f3b15 !important;
-  color:#fff !important;
-}
-
-
-
-/* =========================================================
-   PISTAS GRUPOS – PLATA (ÚNICO bloque que toca esta pestaña)
-   ========================================================= */
-
-/* PISTAS GRUPOS (PLATA): botones activos SOLO en esta pestaña */
-#viewPistasGrupos .btn-opt.active,
-#viewPistasGrupos .btn-juez-grupo.active{
-  background: linear-gradient(180deg,#f5f7fa 0%, #cfd6de 60%, #9aa3ad 100%) !important;
-  color: #1f2937 !important;
-  border-color: #7b8794 !important;
-  box-shadow: 0 4px 10px rgba(120,130,140,.35) !important;
-}
-
-
-/* PISTAS GRUPOS – Botones puestos PLATA */
-#viewPistasGrupos .btn-xs{
-  background:#f2f2f2 !important;
-  border:1px solid #c9c9c9 !important;
-  color:#444 !important;
-}
-
-#viewPistasGrupos .btn-xs.active{
-  background:linear-gradient(180deg,#e6e6e6 0%,#cfcfcf 60%,#b5b5b5 100%) !important;
-  border-color:#9e9e9e !important;
-  color:#222 !important;
-  box-shadow:0 3px 6px rgba(0,0,0,.15) !important;
-}
-/* TAB PISTAS GRUPOS – estilo PLATA */
-#navPistasGrupos.active{
-  background: linear-gradient(180deg,#e6e6e6 0%,#cfcfcf 60%,#b5b5b5 100%) !important;
-  border:1px solid #9e9e9e !important;
-  color:#222 !important;
-}
-
-#navPistasGrupos{
-  border:1px solid #c9c9c9 !important;
-  color:#444 !important;
-}
-
-/* =====================================================
-   PISTAS GRUPOS – CATEGORÍAS (PLATA PROFESIONAL)
-===================================================== */
-
-#viewPistasGrupos h4,
-#viewPistasGrupos .categoria-header{
-  font-size: 16px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #2c2c2c;
-  background: linear-gradient(180deg,#f0f0f0 0%,#d9d9d9 60%,#c2c2c2 100%);
-  border-left: 6px solid #9e9e9e;
-  padding: 8px 14px;
-  border-radius: 8px;
-  margin: 18px 0 8px 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-
-
-/* ===============================
-   PISTAS GRUPOS – HEADER CATEGORÍA PLATA
-================================= */
-#viewPistasGrupos .juzg-header-supercat{
-  font-size: 14px;   /* 15px; */
-  font-weight: 700;  /* 800; */
-  letter-spacing: 0.6px; /* 1; */
-  padding: 6px 12px;  /* 10px 16px; */
-  margin: 14px 0 8px 0;   /* 18px 0 10px 0; */
-
-  color: #2f2f2f;
-
+#navPistas.active {
   background: linear-gradient(
     180deg,
-    #f8f8f8 0%,  /* 0 */
-    #e2e2e2 50%, /* 40 */
-    #cfcfcf 100% /* 0 */
-  );
-
-  border: 1px solid #bdbdbd;
-  border-left: 4px solid #9a9a9a;  /* 6px */
-  border-radius: 8px;  /* 10px */
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.9),
-    0 1px 3px rgba(0,0,0,0.06);  /* 0 2px 6px        rgba(0,0,0,0.08)      */
+    #d4874a 0%,
+    #b87333 70%,
+    #8a4b1c 100%
+  ) !important;
+  border-color: #6f3b15 !important;
+  color: #fff !important;
 }
+
+/* =========================================================
+   PISTAS GRUPOS â€“ PLATA (ÃšNICO bloque que toca esta pestaÃ±a)
+   ========================================================= */
+
+/* PISTAS GRUPOS (PLATA): botones activos SOLO en esta pestaÃ±a */
+
+/* PISTAS GRUPOS â€“ Botones puestos PLATA */
+
+
+/* TAB PISTAS GRUPOS â€“ estilo PLATA */
+
 
 /* =====================================================
-   PISTAS GRUPOS – “PILLS” DE GRUPO (G1, G2, G8) PLATA
-   Solo afecta #viewPistasGrupos
+   PISTAS GRUPOS â€“ CATEGORÃAS (PLATA PROFESIONAL)
 ===================================================== */
-
-#viewPistasGrupos .grupo-pill{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 4px 10px;
-  margin: 6px 8px 6px 0;
-
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: .6px;
-  text-transform: uppercase;
-
-  color: #1f2937;
-  background: linear-gradient(180deg,#f7f7f7 0%,#e3e3e3 55%,#cfcfcf 100%);
-  border: 1px solid #a8a8a8;
-  border-radius: 999px;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.9),
-    0 2px 6px rgba(0,0,0,.10);
-}
-
-/* opcional: un “punto” metálico a la izquierda */
-#viewPistasGrupos .grupo-pill::before{
-  content:"";
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  margin-right: 8px;
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #d0d0d0 45%, #9a9a9a 100%);
-  border: 1px solid rgba(120,120,120,.55);
-}
-
-/* PISTAS GRUPOS – separador visual para cada bloque de grupo */
-#viewPistasGrupos .grupo-pill{
-  margin: 14px 0 8px 0;     /* más aire arriba, menos a la derecha */
-  padding: 6px 12px;
-  font-size: 12px;
-}
-
-#viewPistasGrupos .grupo-pill::after{
-  content:"";
-  display:block;
-  height:1px;
-  margin-top:10px;
-  width: 100%;
-  background: linear-gradient(90deg, rgba(160,160,160,.55), rgba(200,200,200,.15));
-}
-
 
 
 
 /* =====================================================
-   FINALES BIS – ESTILO ORO PROFESIONAL
+   FINALES BIS â€“ ESTILO ORO PROFESIONAL
 ===================================================== */
 
-#viewFinalesBIS .bis-header-supercat{
+#viewFinalesBIS .bis-header-supercat {
   font-size: 16px;
   font-weight: 900;
   letter-spacing: 1px;
@@ -925,17 +1612,16 @@ SECCIONES:
   border-radius: 12px;
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.9),
-    0 4px 10px rgba(0,0,0,0.12);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
-
 /* ================================
-   MÓDULO: FINALES BIS - ORO (AISLADO)
+   MÃ“DULO: FINALES BIS - ORO (AISLADO)
    Solo afecta #viewBis
 ================================ */
 
-#viewBis .bis-title{
+#viewBis .bis-title {
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.8px;
@@ -957,17 +1643,16 @@ SECCIONES:
   border-radius: 10px;
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.85),
-    0 2px 6px rgba(0,0,0,0.10);
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 2px 6px rgba(0, 0, 0, 0.1);
 
   text-transform: uppercase;
 }
 
-
 /* ===============================
    BIS: destacar el grupo [Gx] - ORO
    =============================== */
-#viewBis .bis-card .bis-row .muted{
+#viewBis .bis-card .bis-row .muted {
   display: inline-flex;
   align-items: center;
 
@@ -976,91 +1661,83 @@ SECCIONES:
 
   font-weight: 800;
   font-size: 12px;
-  letter-spacing: .8px;
+  letter-spacing: 0.8px;
 
   color: #4a3200;
 
-  background: linear-gradient(
-    180deg,
-    #fff4c2 0%,
-    #f4d77a 40%,
-    #d4a017 100%
-  );
+  background: linear-gradient(180deg, #fff4c2 0%, #f4d77a 40%, #d4a017 100%);
 
   border: 1px solid #b8860b;
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.7),
-    0 2px 4px rgba(0,0,0,.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 2px 4px rgba(0, 0, 0, 0.08);
 
-  opacity: 1; /* anulamos el muted */
+  opacity: 1;
+  /* anulamos el muted */
 }
 
 /* ===============================
-   BIS – [Gx] al lado del ejemplar + botones a la derecha
+   BIS â€“ [Gx] al lado del ejemplar + botones a la derecha
    =============================== */
 
-#viewBis .bis-card .bis-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;   /* info izq / botones der */
-  gap:12px;
+#viewBis .bis-card .bis-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* info izq / botones der */
+  gap: 12px;
 }
 
-#viewBis .bis-card .bis-row > div:first-child{
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;                  /* si el nombre es largo, baja prolijo */
-  gap:10px;
-  min-width:0;
+#viewBis .bis-card .bis-row > div:first-child {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  /* si el nombre es largo, baja prolijo */
+  gap: 10px;
+  min-width: 0;
 }
 
-/* mata el salto de línea que te separa [G1] del # */
-#viewBis .bis-card .bis-row > div:first-child br{
-  display:none;
+/* mata el salto de lÃ­nea que te separa [G1] del # */
+#viewBis .bis-card .bis-row > div:first-child br {
+  display: none;
 }
 
 /* espacio fino entre [G1] y # */
-#viewBis .bis-card .bis-row > div:first-child strong{
-  margin-left:2px;
+#viewBis .bis-card .bis-row > div:first-child strong {
+  margin-left: 2px;
 }
 
 /* botones siempre compactos y sin romperse */
-#viewBis .bis-card .bis-row .puesto-btns{
-  display:flex;
-  flex-wrap:nowrap;
-  gap:6px;
+#viewBis .bis-card .bis-row .puesto-btns {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
 }
 
-
 /* =====================================================
-   BIS – BOTONES DE PUESTOS (ORO)
+   BIS â€“ BOTONES DE PUESTOS (ORO)
    SOLO afecta a viewBis
 ===================================================== */
 
-#viewBis .btn-xs{
-  background: linear-gradient(180deg,#f5f5f5 0%,#e2e2e2 100%);
+#viewBis .btn-xs {
+  background: linear-gradient(180deg, #f5f5f5 0%, #e2e2e2 100%);
   border: 1px solid #c9c9c9;
   color: #333;
   transition: all 0.2s ease;
 }
 
-#viewBis .btn-xs.active{
-  background: linear-gradient(
-    180deg,
-    #ffe8a3 0%,
-    #f5c94c 45%,
-    #d4a017 100%
-  );
+#viewBis .btn-xs.active {
+  background: linear-gradient(180deg, #ffe8a3 0%, #f5c94c 45%, #d4a017 100%);
   border: 1px solid #b8860b;
   color: #3b2b00;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.6),
-    0 2px 6px rgba(0,0,0,0.15);
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* =========================================
-   NAV – FINALES BIS DORADO
+   NAV â€“ FINALES BIS DORADO
    ========================================= */
 
 #navBis,
@@ -1081,87 +1758,62 @@ SECCIONES:
   filter: brightness(1.05);
 }
 
-
-
 /* =========================================
-   NAV – Botón FINALES BIS (3 estados)
+   NAV â€“ BotÃ³n FINALES BIS (3 estados)
    ========================================= */
 
 /* 1) No seleccionado (idle): dorado CLARO */
-#navBis.tab.tab-bis{
-  background: linear-gradient(180deg, #fff4cc 0%, #f7d97a 55%, #e5b93a 100%) !important;
+#navBis.tab.tab-bis {
+  background: linear-gradient(
+    180deg,
+    #fff4cc 0%,
+    #f7d97a 55%,
+    #e5b93a 100%
+  ) !important;
   border: 1px solid #c79a1f !important;
   color: #3a2b00 !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
-  opacity: .78;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  opacity: 0.78;
 }
 
-/* 2) Hover: un poco más intenso */
-#navBis.tab.tab-bis:hover{
-  opacity: .92;
+/* 2) Hover: un poco mÃ¡s intenso */
+#navBis.tab.tab-bis:hover {
+  opacity: 0.92;
   filter: saturate(1.05) brightness(1.02);
 }
 
 /* 3) Seleccionado (active): dorado FUERTE */
-#navBis.tab.tab-bis.active{
-  background: linear-gradient(180deg, #ffe9a6 0%, #f5c84c 45%, #d6a319 100%) !important;
+#navBis.tab.tab-bis.active {
+  background: linear-gradient(
+    180deg,
+    #ffe9a6 0%,
+    #f5c84c 45%,
+    #d6a319 100%
+  ) !important;
   border: 1px solid #b88700 !important;
   color: #2b1f00 !important;
   opacity: 1;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.6),
-    0 2px 8px rgba(0,0,0,.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
-
-
 /* =========================================
-   NAV – Botón Pistas Grupos (PLATA)
+   NAV â€“ BotÃ³n Pistas Grupos (PLATA)
    ========================================= */
 
 /* 1) No seleccionado (idle): plata CLARO */
-#navPistasGrupos.tab{
-  background: linear-gradient(
-    180deg,
-    #f2f2f2 0%,
-    #dddddd 50%,
-    #c9c9c9 100%
-  ) !important;
-  border: 1px solid #b5b5b5 !important;
-  color: #2f2f2f !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
-  opacity: .85;
-}
 
 /* 2) Hover */
-#navPistasGrupos.tab:hover{
-  opacity: .95;
-  filter: brightness(1.02);
-}
 
 /* 3) Seleccionado (active): plata FUERTE */
-#navPistasGrupos.tab.active{
-  background: linear-gradient(
-    180deg,
-    #e5e5e5 0%,
-    #cfcfcf 45%,
-    #b8b8b8 100%
-  ) !important;
-  border: 1px solid #9f9f9f !important;
-  color: #1f1f1f !important;
-  opacity: 1;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.7),
-    0 2px 6px rgba(0,0,0,.12);
-}
-
 
 /* =========================================
-   NAV – Botón Pistas Razas (COBRE)
+   NAV â€“ BotÃ³n Pistas Razas (COBRE)
    ========================================= */
 
 /* 1) No seleccionado (idle): cobre CLARO */
-#navPistas.tab{
+#navPistas.tab {
   background: linear-gradient(
     180deg,
     #f3d2bf 0%,
@@ -1170,18 +1822,18 @@ SECCIONES:
   ) !important;
   border: 1px solid #b87333 !important;
   color: #3b1f0f !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
-  opacity: .85;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  opacity: 0.85;
 }
 
 /* 2) Hover */
-#navPistas.tab:hover{
-  opacity: .95;
+#navPistas.tab:hover {
+  opacity: 0.95;
   filter: brightness(1.05);
 }
 
 /* 3) Seleccionado (active): cobre FUERTE */
-#navPistas.tab.active{
+#navPistas.tab.active {
   background: linear-gradient(
     180deg,
     #d08a5c 0%,
@@ -1192,79 +1844,103 @@ SECCIONES:
   color: #ffffff !important;
   opacity: 1;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.4),
-    0 2px 6px rgba(0,0,0,.15);
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.15);
 }
-
-
-
 
 /* Ajustes de estilo para pantalla de login 19/2/2026 */
 #loginOverlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
-  z-index: 9999; display: flex; align-items: center; justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-
 .login-box {
-  width: 520px;
-  max-width: 92%;
+  width: 320px;
   padding: 30px !important;
   text-align: center;
   border: 2px solid #b87333 !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
 }
 
+.login-logo {
+  width: 80px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  border: 2px solid #b87333;
+}
 
+.login-header h2 {
+  color: #8a4b1c;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
 
+.login-header p {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 20px;
+}
 
-.login-logo { width: 80px; border-radius: 50%; margin-bottom: 15px; border: 2px solid #b87333; }
-.login-header h2 { color: #8a4b1c; font-size: 18px; margin-bottom: 5px; }
-.login-header p { font-size: 12px; color: #666; margin-bottom: 20px; }
 #inputApiKey {
-  width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px;
-  text-align: center; font-size: 16px; letter-spacing: 2px; margin-bottom: 15px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 16px;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /* Ajustes para Celulares */
 @media (max-width: 600px) {
   /* 1. Forzar una sola columna en los formularios */
-  .grid-container, .form-row, .pistas-container, .main-layout, .container {
+  .grid-container,
+  .form-row,
+  .pistas-container,
+  .main-layout,
+  .container {
     display: flex;
     flex-direction: column !important;
     gap: 15px;
   }
 
   /* 2. Control del orden: Pistas arriba, Juzgamiento abajo */
-   .pistas-seccion, .pistas-listado {
-    order: 1; /* Primero */
+  .pistas-seccion,
+  .pistas-listado {
+    order: 1;
+    /* Primero */
   }
 
-  .juzgamiento-seccion, .sidebar-derecho, .live-results {
-    order: 2; /* Segundo (Abajo) */
+  .juzgamiento-seccion,
+  .sidebar-derecho,
+  .live-results {
+    order: 2;
+    /* Segundo (Abajo) */
     width: 100% !important;
     margin-top: 20px;
   }
 
-
   /* 3. Inputs al 100% de ancho */
-  input, select, button {
+  input,
+  select,
+  button {
     width: 100%;
-    font-size: 16px; /* Evita que iOS haga zoom automático al escribir */
-    padding: 12px;   /* Botones más grandes para el dedo */
-    box-sizing: border-box; /* Asegura que el padding no rompa el ancho */
+    font-size: 16px;
+    /* Evita que iOS haga zoom automÃ¡tico al escribir */
+    padding: 12px;
+    /* Botones mÃ¡s grandes para el dedo */
+    box-sizing: border-box;
+    /* Asegura que el padding no rompa el ancho */
   }
 
   /* 3. Tablas con scroll horizontal para que no se rompan */
@@ -1275,8 +1951,1048 @@ SECCIONES:
     width: 100%;
   }
 
-  /* 4. Ocultar columnas no críticas si es necesario */
+  /* 4. Ocultar columnas no crÃ­ticas si es necesario */
   .col-opcional {
     display: none;
+  }
+}
+
+/* --- REFORMA AUSENTE --- */
+#viewPistas .dog-card-compact.is-ausente {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  background-color: #f8f9fa !important;
+  border-left-color: #7f8c8d !important;
+  border-color: #d1d1d1 !important;
+}
+
+#viewPistas .btn-aus {
+  background: #fff !important;
+  border: 1px solid #e74c3c !important;
+  color: #e74c3c !important;
+  margin-right: 5px;
+}
+
+#viewPistas .btn-aus.active {
+  background: #e74c3c !important;
+  color: #fff !important;
+  border-color: #c0392b !important;
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4) !important;
+}
+
+#viewPistas .puesto-btns {
+  display: flex;
+  align-items: center;
+}
+
+.puesto-separator {
+  width: 1px;
+  height: 20px;
+  background: #ddd;
+  margin: 0 10px;
+}
+
+.ausente-badge {
+  background: #e74c3c;
+  color: white;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 800;
+  margin-left: 10px;
+  letter-spacing: 0.5px;
+}
+
+#viewPistas .is-ausente .btn-xs:not(.btn-aus) {
+  pointer-events: none;
+  background: #eee !important;
+  color: #bbb !important;
+  border-color: #ddd !important;
+}
+
+/* Estilo para la toolbar extra de catÃ¡logos */
+.catalog-toolbar-extra {
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  animation: fadeInDown 0.3s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#filterCatalogEvento {
+  border: 2px solid #b87333;
+  border-radius: 8px;
+  padding: 10px;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#filterCatalogEvento:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(184, 115, 51, 0.3);
+}
+
+/* AUS en Pistas Grupos - estilo similar a Razas */
+
+
+
+
+
+
+#viewBis .bis-card.is-ausente {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  background-color: #f8f9fa !important;
+  border-left-color: #7f8c8d !important;
+  border-color: #d1d1d1 !important;
+}
+
+#viewBis .bis-aus-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+}
+
+#viewBis .btn-aus-bis {
+  background: #fff !important;
+  border: 1px solid #e74c3c !important;
+  color: #e74c3c !important;
+  font-weight: 800 !important;
+}
+
+#viewBis .btn-aus-bis.active {
+  background: #e74c3c !important;
+  color: #fff !important;
+  border-color: #c0392b !important;
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.35) !important;
+}
+
+#viewBis .bis-card.is-ausente .puesto-btns .btn-xs {
+  pointer-events: none;
+  background: #eee !important;
+  color: #bbb !important;
+  border-color: #ddd !important;
+}
+
+#viewBis .bis-card.is-ausente .btn-aus-bis {
+  pointer-events: auto !important;
+}
+
+#viewBis .bis-card .bis-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.juez-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.juez-main {
+  flex: 1;
+}
+
+.juez-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+}
+
+.juez-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.95em;
+  color: #444;
+}
+
+.juez-info-row {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.juez-label {
+  font-weight: 600;
+  color: #666;
+}
+
+.pista-pill.assigned {
+  background: #e8f6ee;
+  color: #17633a;
+  border-color: #9fd7b7;
+}
+
+.pista-pill.unassigned {
+  background: #f3f4f6;
+  color: #667085;
+  border-color: #d0d5dd;
+}
+
+.jueces-evento-panel {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.jueces-asociar-box {
+  border: 1px solid #d8dee7;
+  background: #f8fafc;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.jueces-asociar-box h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #263241;
+}
+
+.jueces-asociar-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.jueces-asociar-grid .field {
+  margin-bottom: 0;
+}
+
+#asociarJuezSelect {
+  width: 100%;
+  max-width: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#asociarPistaSelect {
+  width: 100%;
+  max-width: 220px;
+}
+
+.jueces-grupos-field .btn-group-pistas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.jueces-asignar-btn {
+  min-height: 38px;
+  justify-self: end;
+}
+
+.juez-card-evento {
+  cursor: default;
+}
+
+.juez-evento-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .jueces-asociar-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.juez-observaciones {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #6f171d;
+  font-weight: 600;
+}
+
+#viewPistas .final-grupo-compact {
+  display: grid;
+  gap: 6px;
+}
+
+#viewPistas .final-grupo-row {
+  border: 1px solid #dce2ea;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+#viewPistas .final-grupo-row.is-open {
+  border-color: #b87333;
+}
+
+#viewPistas .final-grupo-toggle {
+  width: 100%;
+  min-height: 34px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  border: 0;
+  background: #fff;
+  color: #263241;
+  cursor: pointer;
+  text-align: left;
+}
+
+#viewPistas .final-grupo-toggle span {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+#viewPistas .final-grupo-toggle strong {
+  min-width: 88px;
+  padding: 4px 7px;
+  border: 1px solid #d7dde6;
+  border-radius: 4px;
+  background: #f5f7fa;
+  color: #1f2937;
+  font-size: 12px;
+  text-align: center;
+}
+
+#viewPistas .final-grupo-row.is-open .final-grupo-toggle strong {
+  background: #fff2e6;
+  border-color: #d4874a;
+}
+
+#viewPistas .final-grupo-candidatos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 7px 8px 8px 8px;
+  border-top: 1px solid #e7ebf0;
+  background: #fbfcfd;
+}
+
+#viewPistas .final-grupo-candidato {
+  min-width: 44px !important;
+}
+
+.juez-photo {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.juez-photo-placeholder {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  background: #f0f4f8;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  color: #aab;
+}
+
+@media (max-width: 600px) {
+  .juez-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .juez-photo,
+  .juez-photo-placeholder {
+    width: 80px;
+    height: 80px;
+    align-self: flex-start;
+    margin-top: 10px;
+  }
+}
+
+#viewPistas .puesto-btns,
+#viewPistas .raza-puestos,
+#viewPistas .dog-card .btn-group-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+
+#viewBis .puesto-btns,
+#viewBis .btn-group-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+#viewBis .bis-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+}
+
+#viewBis .bis-card .bis-row {
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  grid-template-areas:
+    "info info"
+    "aus puestos" !important;
+  gap: 8px 12px !important;
+  align-items: center !important;
+}
+
+#viewBis .bis-card .bis-row > div:first-child {
+  grid-area: info !important;
+  font-size: 1rem !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+}
+
+#viewBis .bis-aus-zone {
+  grid-area: aus !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+
+#viewBis .bis-card .puesto-btns,
+#viewBis .bis-card .btn-group-inline {
+  grid-area: puestos !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+
+#viewBis .bis-card .btn-xs {
+  min-width: 34px !important;
+}
+
+@media (min-width: 900px) {
+  #viewBis .bis-card .bis-row {
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+    grid-template-areas: "info aus puestos" !important;
+  }
+
+  #viewBis .bis-card .bis-row > div:first-child {
+    grid-area: info !important;
+  }
+
+  #viewBis .bis-aus-zone {
+    grid-area: aus !important;
+  }
+
+  #viewBis .bis-card .puesto-btns,
+  #viewBis .bis-card .btn-group-inline {
+    grid-area: puestos !important;
+    justify-content: flex-end !important;
+  }
+}
+
+/* Overrides finales de Planilla Oficial Digital sobre estilos viejos de Pistas Razas. */
+#viewPistas .planilla-oficial .btn-xs {
+  min-height: 30px !important;
+  min-width: 38px !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+#viewPistas .planilla-oficial .grupo-pass .btn-xs {
+  height: auto !important;
+  min-height: 28px !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+}
+
+#viewPistas .planilla-oficial .planilla-head h2 {
+  color: #fff !important;
+}
+
+.perro-id-simple {
+  min-width: 70px;
+  justify-content: center;
+  text-align: center;
+}
+
+.planilla-perro {
+  align-items: center;
+}
+
+.planilla-actions {
+  align-items: center;
+}
+
+/* =====================================================
+   PISTAS RAZAS - CABECERA ORDENADA EN 3 COLUMNAS
+===================================================== */
+
+#viewPistas .field {
+  align-self: stretch;
+}
+
+/* Columna 1: Evento */
+#pistaEventoSelect {
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Columna 2: Juez / Pista */
+.planilla-jueces {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  max-width: 420px;
+}
+
+.planilla-jueces .btn-juez-pista {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+}
+
+/* Columna 3: Pista activa */
+#selectorPistaActiva {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  max-width: 230px;
+}
+
+#selectorPistaActiva .btn-opt {
+  width: 100%;
+  text-align: left;
+}
+
+/* Texto de cantidad de perros debajo de jueces */
+.planilla-count {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #46566a;
+}
+
+/* =====================================================
+   CARGA PLANILLA OFICIAL - OCULTAR CRONOGRAMA VIEJO
+===================================================== */
+
+#cronogramaPistas {
+  display: none !important;
+}
+
+/* =====================================================
+   PLANILLA OFICIAL DIGITAL - COMPACTAR FUENTES Y ESPACIOS
+===================================================== */
+
+.planilla-oficial {
+  font-size: 12px !important;
+}
+
+.planilla-head {
+  padding: 10px 14px !important;
+}
+
+.planilla-head h2 {
+  font-size: 18px !important;
+  margin: 0 0 4px 0 !important;
+}
+
+.planilla-head p {
+  font-size: 11px !important;
+  margin: 0 !important;
+}
+
+.planilla-badge {
+  font-size: 13px !important;
+  padding: 8px 12px !important;
+}
+
+.planilla-filtros {
+  padding: 8px 10px !important;
+  gap: 8px !important;
+}
+
+.planilla-filtros strong {
+  font-size: 12px !important;
+}
+
+.planilla-filter {
+  font-size: 11px !important;
+  padding: 5px 9px !important;
+}
+
+/* Tabla principal */
+.planilla-tabla {
+  font-size: 11px !important;
+}
+
+.planilla-tabla th {
+  font-size: 11px !important;
+  padding: 6px 8px !important;
+}
+
+.planilla-tabla td {
+  padding: 5px 6px !important;
+}
+
+.planilla-cat {
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+.planilla-cat span {
+  font-size: 11px !important;
+  padding: 3px 6px !important;
+}
+
+/* Perros */
+.planilla-perro {
+  padding: 6px 6px !important;
+  gap: 6px !important;
+  min-height: auto !important;
+}
+
+.perro-id-simple {
+  min-width: 55px !important;
+}
+
+.dog-num {
+  font-size: 15px !important;
+}
+
+.planilla-actions {
+  gap: 4px !important;
+}
+
+.btn-xs {
+  font-size: 10.5px !important;
+  padding: 4px 7px !important;
+  min-height: 24px !important;
+  line-height: 1.1 !important;
+}
+
+/* Panel derecho */
+.planilla-finales {
+  font-size: 11px !important;
+  padding: 8px !important;
+}
+
+.planilla-finales h3 {
+  font-size: 13px !important;
+  margin: 6px 0 8px 0 !important;
+}
+
+.final-rol {
+  padding: 6px 7px !important;
+  margin-bottom: 6px !important;
+}
+
+.final-title {
+  font-size: 10.5px !important;
+  margin-bottom: 5px !important;
+}
+
+.final-candidatos {
+  gap: 4px !important;
+}
+
+.grupo-pass {
+  padding: 6px 7px !important;
+  margin-bottom: 6px !important;
+}
+
+.grupo-pass strong {
+  font-size: 12px !important;
+}
+
+/* VacÃ­os */
+.planilla-empty {
+  font-size: 11px !important;
+  padding: 4px !important;
+}
+
+/* =====================================================
+   PLANILLA OFICIAL DIGITAL - PERRO EN 3 RENGLONES
+===================================================== */
+
+.planilla-perro-horizontal {
+  display: grid !important;
+  grid-template-columns: 54px minmax(0, 1fr) !important;
+  align-items: center !important;
+  column-gap: 6px !important;
+  padding: 5px 6px !important;
+  min-height: auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.perro-id-mini {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 50px !important;
+  max-width: 54px !important;
+  text-align: center !important;
+}
+
+.perro-id-mini .dog-num {
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.aus-mini-label {
+  margin-top: 3px !important;
+  font-size: 9px !important;
+  color: #d62828 !important;
+}
+
+.perro-carga-rapida {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+.linea-botones {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+.linea-puestos .btn-xs,
+.linea-calificaciones .btn-xs {
+  min-width: 31px !important;
+}
+
+/* Botones mÃ¡s compactos dentro de la planilla */
+.planilla-perro-horizontal .btn-xs {
+  font-size: 10px !important;
+  padding: 3px 6px !important;
+  min-height: 22px !important;
+  line-height: 1 !important;
+  border-radius: 4px !important;
+}
+
+/* Que la tabla no corte los botones */
+.planilla-tabla td {
+  overflow: visible !important;
+}
+
+.planilla-tabla-wrap {
+  overflow-x: visible !important;
+}
+
+/* Dar mÃ¡s aire a la columna de carga y menos a categorÃ­a */
+.planilla-tabla .col-cat,
+.planilla-tabla th.col-cat {
+  width: 145px !important;
+  min-width: 145px !important;
+}
+
+.planilla-cat {
+  width: 145px !important;
+  min-width: 145px !important;
+  font-size: 11px !important;
+}
+
+/* La columna Perros debe ocupar el espacio real */
+.planilla-tabla th:nth-child(2),
+.planilla-tabla td:nth-child(2) {
+  min-width: 455px !important;
+}
+
+/* Ajuste de la grilla general: mÃ¡s espacio a la tabla, menos al panel derecho */
+.planilla-workgrid {
+  grid-template-columns: minmax(620px, 1fr) 330px !important;
+  gap: 8px !important;
+}
+
+/* =====================================================
+   FIX PLANILLA OFICIAL - SIN SUPERPOSICIONES NI SCROLL INTERNO
+===================================================== */
+
+/* La planilla no debe crear ventanitas internas */
+.planilla-oficial,
+.planilla-workgrid,
+.planilla-tabla-wrap,
+.planilla-finales {
+  max-height: none !important;
+  height: auto !important;
+}
+
+/* El scroll debe ser el de la pÃ¡gina, no el del panel derecho */
+.planilla-finales {
+  overflow: visible !important;
+  position: static !important;
+  top: auto !important;
+  align-self: start !important;
+  z-index: 2 !important;
+  background: #ffffff !important;
+}
+
+/* La grilla principal: mÃ¡s espacio para la planilla, menos para finales */
+.planilla-workgrid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 295px !important;
+  gap: 8px !important;
+  align-items: start !important;
+  overflow: visible !important;
+}
+
+/* Evita que botones de la tabla invadan el panel derecho */
+.planilla-tabla-wrap {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+}
+
+/* Tabla mÃ¡s eficiente */
+.planilla-tabla {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+.planilla-tabla .col-cat,
+.planilla-tabla th.col-cat,
+.planilla-tabla td:first-child {
+  width: 125px !important;
+  min-width: 125px !important;
+  max-width: 125px !important;
+}
+
+.planilla-tabla th:nth-child(2),
+.planilla-tabla td:nth-child(2) {
+  width: auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Perro: nÃºmero bien a la izquierda, botones pegados */
+.planilla-perro-horizontal {
+  display: grid !important;
+  grid-template-columns: 46px minmax(0, 1fr) !important;
+  column-gap: 4px !important;
+  align-items: center !important;
+  padding: 4px 5px !important;
+}
+
+.perro-id-mini {
+  min-width: 42px !important;
+  max-width: 46px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.perro-id-mini .dog-num {
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+/* Tres renglones exactos */
+.perro-carga-rapida {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.linea-botones {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 2px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+/* RenglÃ³n 1: AUS 1 2 3 4 5 6 7 */
+.linea-puestos .btn-xs {
+  min-width: 26px !important;
+  width: 26px !important;
+  padding: 3px 0 !important;
+  font-size: 9.5px !important;
+}
+
+.linea-puestos .btn-aus {
+  min-width: 34px !important;
+  width: 34px !important;
+}
+
+/* RenglÃ³n 2: MP P / Exc MB B D */
+.linea-calificaciones .btn-xs {
+  min-width: 30px !important;
+  width: 30px !important;
+  padding: 3px 0 !important;
+  font-size: 9.5px !important;
+}
+
+/* Compactar el panel derecho */
+.planilla-finales {
+  padding: 7px !important;
+}
+
+.planilla-finales h3 {
+  font-size: 12px !important;
+  margin: 4px 0 6px 0 !important;
+}
+
+.final-rol,
+.grupo-pass {
+  padding: 5px 6px !important;
+  margin-bottom: 5px !important;
+}
+
+.final-title {
+  font-size: 9.8px !important;
+  margin-bottom: 4px !important;
+}
+
+.final-candidatos,
+.rowbuttons-wrap {
+  gap: 3px !important;
+}
+
+.final-candidatos .btn-xs,
+.grupo-pass .btn-xs {
+  font-size: 9.5px !important;
+  padding: 3px 6px !important;
+  min-height: 22px !important;
+}
+
+/* Eliminar cualquier scrollbar interno molesto */
+.planilla-finales::-webkit-scrollbar,
+.planilla-tabla-wrap::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* =====================================================
+   PLANILLA OFICIAL - DOS ZONAS DE SCROLL INDEPENDIENTES
+===================================================== */
+@media (min-width: 901px) {
+  #viewPistas .planilla-oficial {
+    overflow: visible !important;
+  }
+
+  #viewPistas .planilla-workgrid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 315px !important;
+    gap: 8px !important;
+    align-items: start !important;
+    overflow: visible !important;
+  }
+
+  #viewPistas .planilla-tabla-wrap {
+    min-width: 0 !important;
+    max-height: calc(100vh - 220px) !important;
+    height: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    border-right: 1px solid #d8dee7 !important;
+  }
+
+  #viewPistas .planilla-finales {
+    position: sticky !important;
+    top: 8px !important;
+    align-self: start !important;
+
+    max-height: calc(100vh - 32px) !important;
+    height: auto !important;
+
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    padding: 7px !important;
+    padding-bottom: 90px !important;
+
+    background: #ffffff !important;
+    z-index: 3 !important;
+
+    scrollbar-gutter: stable !important;
+  }
+
+  #viewPistas .planilla-tabla-wrap::-webkit-scrollbar,
+  #viewPistas .planilla-finales::-webkit-scrollbar {
+    display: block !important;
+    width: 8px;
+    height: 8px;
+  }
+
+  #viewPistas .planilla-finales::-webkit-scrollbar {
+    display: block !important;
+    width: 9px;
+  }
+
+  #viewPistas .planilla-tabla-wrap::-webkit-scrollbar-thumb,
+  #viewPistas .planilla-finales::-webkit-scrollbar-thumb {
+    background: #c5ccd6;
+    border-radius: 999px;
+  }
+
+  #viewPistas .planilla-finales::-webkit-scrollbar-thumb {
+    background: #b9c2cf;
+    border-radius: 999px;
+  }
+}
+
+@media (min-width: 1320px) {
+  #viewPistas .planilla-workgrid {
+    grid-template-columns: minmax(0, 1fr) 460px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  #viewPistas .planilla-oficial,
+  #viewPistas .planilla-workgrid,
+  #viewPistas .planilla-tabla-wrap,
+  #viewPistas .planilla-finales {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  #viewPistas .planilla-workgrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  #viewPistas .planilla-finales {
+    position: static !important;
+    top: auto !important;
   }
 }
