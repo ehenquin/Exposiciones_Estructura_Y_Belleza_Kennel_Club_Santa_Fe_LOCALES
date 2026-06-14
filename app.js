@@ -262,7 +262,6 @@ function normalizarInscripcionCategoria(row) {
     ? { ...row, IDCategoria: idCategoria }
     : row;
 }
-
 function categoriaBaseSexoDesdeID(idCategoria) {
   const id = normalizarIDCategoria(idCategoria);
   for (const [base, sexos] of Object.entries(IDCATEGORIA_POR_BASE_SEXO)) {
@@ -277,15 +276,26 @@ function sexoIdDesdeOpcion(sexo) {
   const s = String(sexo || "")
     .trim()
     .toLowerCase();
-  if (s === "m" || s.includes("mach")) return "M";
-  if (s === "h" || s.includes("hemb") || s.includes("female")) return "H";
+
+  if (s === "m" || s === "s01" || s.includes("mach")) {
+    return "S01";
+  }
+
+  if (s === "h" || s === "s02" || s.includes("hemb") || s.includes("female")) {
+    return "S02";
+  }
+
   return "";
 }
 
 function sexoOpcionDesdeId(sexo) {
-  const id = sexoIdDesdeOpcion(sexo);
-  if (id === "M") return "Macho";
-  if (id === "H") return "Hembra";
+  const s = String(sexo || "")
+    .trim()
+    .toUpperCase();
+
+  if (s === "S01") return "Macho";
+  if (s === "S02") return "Hembra";
+
   return "";
 }
 
@@ -3540,14 +3550,14 @@ async function guardarInscripcion() {
   }
 
   row.IDCategoria = cat.id;
-  if (row.IDCategoria === "C07") {
-    row.IDSexo = sexoIdDesdeOpcion(row.IDSexo);
-    if (!row.IDSexo) {
-      alert("Seleccione sexo para Campeón.");
-      return;
-    }
-  } else {
-    delete row.IDSexo;
+
+  // Normalizar sexo seleccionado
+  row.IDSexo = sexoIdDesdeOpcion(row.IDSexo);
+
+  // Validar que exista sexo
+  if (!row.IDSexo) {
+    alert("Seleccione sexo.");
+    return;
   }
   row.IDEvento = row.IDEvento || getActiveEventInscripcion();
 
