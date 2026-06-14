@@ -3797,6 +3797,8 @@ window.guardarResultado = async function (
 ) {
   e?.stopPropagation?.();
 
+  const btn = e?.currentTarget || e?.target || null;
+
   const nP = normalizeID(idInscripcion);
   const nJ = normalizeID(idJuez);
   const nE = normalizeID(idEvento);
@@ -3818,69 +3820,66 @@ window.guardarResultado = async function (
       IDEvento: idEvento,
       Calificacion: "",
       Puesto: "",
+      Ausente: false,
       Titulo_Ganado: "",
       RolesFinalRaza: "",
     };
     resultados.push(registro);
   }
 
-  if (esMulti) {
-    let actuales = splitMulti(registro[campo]);
-    if (actuales.includes(valor)) {
-      actuales = actuales.filter((v) => v !== valor);
+  if (campo === "Ausente") {
+    // Toggle AUS
+    const nuevoAusente = !registro.Ausente;
+
+    registro.Ausente = nuevoAusente;
+
+    if (nuevoAusente) {
+      registro.Calificacion = "AUS";
+      registro.Puesto = "";
+      registro.Titulo_Ganado = "";
+      registro.RolesFinalRaza = "";
     } else {
-      actuales.push(valor);
+      registro.Calificacion = "";
     }
-    registro[campo] = actuales.join(", ");
+  } else if (esMulti) {
+    let actuales = splitMulti(registro[campo]);
+    registro[campo] = actuales.includes(valor)
+      ? actuales.filter((v) => v !== valor).join(", ")
+      : [...actuales, valor].join(", ");
   } else {
     registro[campo] = valor;
   }
 
+  asegurarCamposResultadoRaza(registro);
   CACHE.set("Resultados_Razas", resultados);
 
-  const payload = {
-    IDResultado: registro.IDResultado,
-    IDInscripcion: registro.IDInscripcion,
-    IDJuez: registro.IDJuez,
-    IDEvento: registro.IDEvento,
-    Calificacion: registro.Calificacion,
-    Puesto: registro.Puesto,
-    Titulo_Ganado: registro.Titulo_Ganado,
-    RolesFinalRaza: registro.RolesFinalRaza,
-  };
+  updatePlanillaPerroVisual(btn, campo, registro);
+  refreshPlanillaDerechaDebounced?.();
 
+  const payload = payloadResultadoRaza(registro);
   const isTemp = String(registro.IDResultado).startsWith("TEMP_");
 
-  const body = {
-    key: CONFIG.API_KEY,
-    table: "Resultados_Razas",
-    action: isTemp ? "create" : "update",
-    id: registro.IDResultado,
-    payload,
-  };
-
-  const resp = await fetch(CONFIG.API_URL, {
-    method: "POST",
-    body: JSON.stringify(body),
-  });
-
-  const data = await resp.json();
-
-  if (data.ok && isTemp) {
-    registro.IDResultado = data.id;
-    CACHE.set("Resultados_Razas", resultados);
-  }
-
-  const ctx = getPlanillaFinalesContextoActual?.();
-  if (ctx) {
-    ctx.aside.innerHTML = renderPlanillaFinalesHTML(
-      ctx.perrosRaza,
-      ctx.sexos,
-      ctx.juezId,
-      ctx.idEventoActivo,
-      ctx.esLimitada,
-      CACHE.get("Resultados_Razas") || [],
+  try {
+    const data = await api(
+      "POST",
+      {},
+      {
+        action: isTemp ? "create" : "update",
+        table: "Resultados_Razas",
+        payload,
+        id: isTemp ? null : registro.IDResultado,
+      },
     );
+
+    if (data.ok && isTemp && data.id) {
+      registro.IDResultado = data.id;
+      CACHE.set("Resultados_Razas", resultados);
+    }
+
+    setStatus("Resultado sincronizado.");
+  } catch (err) {
+    console.error("Error guardando resultado:", err);
+    setStatus("Error guardando resultado. Revisar conexión/API.", true);
   }
 };
 
