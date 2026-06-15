@@ -2,6 +2,7 @@ import { CONFIG } from "./config.js";
 
 const $ = (id) => document.getElementById(id);
 const CACHE = new Map();
+window.GUARDADOS_EN_CURSO = 0;
 
 // --- ESTRUCTURA PARA EL TEMPORIZADOR (AUTO-GUARDADO) ---
 const pendingTimers = new Map();
@@ -499,6 +500,11 @@ async function syncAll() {
   setStatus("Sincronizando datos...");
   try {
     const res = await api("GET", { action: "sync" });
+
+    if (window.GUARDADOS_EN_CURSO > 0) {
+      console.log("syncAll cancelado: hay guardados pendientes");
+      return;
+    }
 
     CACHE.clear();
 
@@ -3825,6 +3831,27 @@ window.guardarResultado = async function (
       RolesFinalRaza: "",
     };
     resultados.push(registro);
+  } else {
+    // limpiar posibles valores undefined
+    registro.Calificacion ??= "";
+    registro.Puesto ??= "";
+    registro.Titulo_Ganado ??= "";
+    registro.RolesFinalRaza ??= "";
+  }
+
+  if (!registro) {
+    registro = {
+      IDResultado: "TEMP_" + Date.now(),
+      IDInscripcion: idInscripcion,
+      IDJuez: idJuez,
+      IDEvento: idEvento,
+      Calificacion: "",
+      Puesto: "",
+      Ausente: false,
+      Titulo_Ganado: "",
+      RolesFinalRaza: "",
+    };
+    resultados.push(registro);
   }
 
   if (campo === "Ausente") {
@@ -3856,30 +3883,44 @@ window.guardarResultado = async function (
   updatePlanillaPerroVisual(btn, campo, registro);
   refreshPlanillaDerechaDebounced?.();
 
-  const payload = payloadResultadoRaza(registro);
-  const isTemp = String(registro.IDResultado).startsWith("TEMP_");
+  if (registro._guardando) {
+    registro._pendiente = true;
+  } else {
+    registro._guardando = true;
+    window.GUARDADOS_EN_CURSO++;
 
-  try {
-    const data = await api(
-      "POST",
-      {},
-      {
-        action: isTemp ? "create" : "update",
-        table: "Resultados_Razas",
-        payload,
-        id: isTemp ? null : registro.IDResultado,
-      },
-    );
+    try {
+      do {
+        registro._pendiente = false;
 
-    if (data.ok && isTemp && data.id) {
-      registro.IDResultado = data.id;
-      CACHE.set("Resultados_Razas", resultados);
+        const payload = payloadResultadoRaza(registro);
+        const isTemp = String(registro.IDResultado).startsWith("TEMP_");
+
+        const data = await api(
+          "POST",
+          {},
+          {
+            action: isTemp ? "create" : "update",
+            table: "Resultados_Razas",
+            payload,
+            id: isTemp ? null : registro.IDResultado,
+          },
+        );
+
+        if (data.ok && isTemp && data.id) {
+          registro.IDResultado = data.id;
+          CACHE.set("Resultados_Razas", resultados);
+        }
+      } while (registro._pendiente);
+
+      setStatus("Resultado sincronizado.");
+    } catch (err) {
+      console.error("Error guardando resultado:", err);
+      setStatus("Error guardando resultado. Revisar conexión/API.", true);
+    } finally {
+      registro._guardando = false;
+      window.GUARDADOS_EN_CURSO = Math.max(0, window.GUARDADOS_EN_CURSO - 1);
     }
-
-    setStatus("Resultado sincronizado.");
-  } catch (err) {
-    console.error("Error guardando resultado:", err);
-    setStatus("Error guardando resultado. Revisar conexión/API.", true);
   }
 };
 
@@ -4215,19 +4256,19 @@ function renderJuzgamientoBis() {
       normalizeID(r.IDEvento) === nE &&
       normalizeID(r.IDJuez) === nJ &&
       !isTruthy(r.Ausente) &&
-      r.Titulo_Ganado &&
-      TITULOS_GANADOS_BIS_RAZA.includes(String(r.Titulo_Ganado)),
+      String(r.RolesFinalRaza || "").trim() !== "",
   );
 
   let html = "";
 
   Object.keys(MAPA_BIS_FINALES).forEach((nombreBis) => {
-    const tituloBloque = TITULO_GANADO_BIS_POR_BLOQUE[nombreBis] || "";
-    const ganadoresRaza = tituloBloque
-      ? candidatosRaza.filter(
-          (rr) => String(rr.Titulo_Ganado || "") === tituloBloque,
-        )
-      : [];
+    const rolesBloque = MAPA_BIS_FINALES[nombreBis] || [];
+
+    const ganadoresRaza = candidatosRaza.filter((rr) =>
+      splitMulti(rr.RolesFinalRaza || "").some((rol) =>
+        rolesBloque.includes(rol),
+      ),
+    );
 
     const porInscripcion = new Map();
     ganadoresRaza.forEach((rr) => {
